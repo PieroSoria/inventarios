@@ -6,7 +6,7 @@ import 'package:inventarios/interface/page/dashboard.dart';
 import 'package:inventarios/interface/page/guardarinventario.dart';
 import 'package:inventarios/interface/page/import.dart';
 
-import 'Inventarios.dart';
+import 'inventarios_let.dart';
 import 'conteo_let.dart';
 
 class Index extends StatefulWidget {

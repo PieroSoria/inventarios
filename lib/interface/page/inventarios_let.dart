@@ -1,18 +1,6 @@
-// ignore_for_file: file_names
-
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:inventarios/database/function/funciones_basicas.dart';
-import 'package:path_provider/path_provider.dart';
-
-import 'package:sqflite/sqflite.dart';
-import 'package:excel/excel.dart';
-// ignore: depend_on_referenced_packages
-import 'package:path/path.dart' as path;
-// ignore: unnecessary_import
-import 'package:flutter/services.dart';
+import 'package:inventarios/database/function/funciones_excel.dart';
 
 import '../../database/createdb/database.dart';
 
@@ -24,6 +12,7 @@ class Inventario extends StatefulWidget {
 }
 
 class _InventarioState extends State<Inventario> {
+  ExcelFuncion excelFuncion = ExcelFuncion();
   TextEditingController selectalmacen = TextEditingController();
   SQLdb sqLdb = SQLdb();
   String? _selectedItem;
@@ -47,97 +36,6 @@ class _InventarioState extends State<Inventario> {
         _selectedItem = dropdownItems.first;
       }
     });
-  }
-
-  Future<void> convertTableToExcel(String name, String nombretabla) async {
-    // Abrir la base de datos SQLite
-    final databasePath = await getDatabasesPath();
-    final database =
-        await openDatabase(path.join(databasePath, 'productos.db'));
-
-    // Leer los datos de la tabla SQLite
-    final String? tabla = await funciones.obtenerbasedatos(nombretabla);
-    final List<Map<String, dynamic>> tableData = await database.query('$tabla');
-
-    // Crear un nuevo archivo de Excel
-    final excel = Excel.createExcel();
-
-    // Crear una hoja de trabajo en el archivo de Excel
-    final sheet = excel['Sheet1'];
-
-    // Escribir los encabezados de columna en la hoja de trabajo
-    final headers = tableData.first.keys.toList();
-    for (var i = 0; i < headers.length; i++) {
-      sheet
-          .cell(CellIndex.indexByColumnRow(columnIndex: i, rowIndex: 0))
-          .value = headers[i];
-    }
-
-    // Escribir los datos en la hoja de trabajo
-    for (var i = 0; i < tableData.length; i++) {
-      final row = tableData[i];
-      final values = row.values.toList();
-      for (var j = 0; j < values.length; j++) {
-        sheet
-            .cell(CellIndex.indexByColumnRow(columnIndex: j, rowIndex: i + 1))
-            .value = values[j].toString();
-      }
-    }
-
-    // Mostrar el diálogo de selección de carpeta
-    final outputPath = await FilePicker.platform.getDirectoryPath();
-
-    if (outputPath != null) {
-      // Obtener el directorio de documentos del dispositivo
-      final documentsDirectory = await getApplicationDocumentsDirectory();
-      final documentsPath = documentsDirectory.path;
-
-      // Crear la ruta de salida en la carpeta seleccionada
-      final outputDirectory =
-          Directory(path.join(documentsPath, 'ExcelOutput'));
-      await outputDirectory.create(recursive: true);
-      final excelPath = path.join(outputPath, '$name.xlsx');
-
-      // Guardar el archivo de Excel en la carpeta seleccionada
-      final excelBytes = excel.encode();
-      final excelFile = File(excelPath);
-      await excelFile.writeAsBytes(excelBytes!);
-      debugPrint('Tabla SQLite convertida a Excel: $excelPath');
-      // ignore: use_build_context_synchronously
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            'MENSAJE',
-            style: TextStyle(color: Colors.blue.shade900),
-          ),
-          content: Text(
-            'SE GUARDO EXITOSAMENTE',
-            style: TextStyle(color: Colors.blue.shade900),
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                nameexcel.text = '';
-                Navigator.of(context).pop();
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.blue.shade900,
-                shape: const StadiumBorder(),
-                padding: const EdgeInsets.all(16.0),
-              ),
-              child: const Text(
-                'ACEPTAR',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        ),
-      );
-    } else {
-      debugPrint('No se seleccionó ninguna carpeta.');
-    }
   }
 
   Future<List<Map>> getAllProducts({String? selectalmacen}) async {
@@ -347,7 +245,8 @@ class _InventarioState extends State<Inventario> {
                                 String nombretabla =
                                     "${listproducts[index]['nombre']}";
                                 if (name != '') {
-                                  convertTableToExcel(name, nombretabla);
+                                  excelFuncion.convertTableToExcel(
+                                      context, name, nombretabla);
                                   Navigator.of(context).pop();
                                 } else {
                                   showDialog(

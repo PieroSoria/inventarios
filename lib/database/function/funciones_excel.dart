@@ -1,17 +1,23 @@
 import 'dart:io';
 
 import 'package:excel/excel.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
+
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../models/productos/inventarios.dart';
 import '../../models/productos/productos.dart';
 import '../createdb/database.dart';
+import 'funciones_basicas.dart';
 
 class ExcelFuncion {
   SQLdb sqLdb = SQLdb();
+  FuncionesBasic funciones = FuncionesBasic();
   Future<void> insertarDatosDesdeExcel(
       String filePath, String basedatos) async {
     List<List<dynamic>> excelData = await leerExcel(filePath);
@@ -156,5 +162,96 @@ class ExcelFuncion {
   Future<void> insertinventario(Inventarios inven) async {
     Database? mydb = await sqLdb.db;
     await mydb!.insert('inventarios', inven.toMap());
+  }
+
+  Future<void> convertTableToExcel(
+      BuildContext context, String name, String nombretabla) async {
+    // Abrir la base de datos SQLite
+    final databasePath = await getDatabasesPath();
+    final database =
+        await openDatabase(path.join(databasePath, 'productos.db'));
+
+    // Leer los datos de la tabla SQLite
+    final String? tabla = await funciones.obtenerbasedatos(nombretabla);
+    final List<Map<String, dynamic>> tableData = await database.query('$tabla');
+
+    // Crear un nuevo archivo de Excel
+    final excel = Excel.createExcel();
+
+    // Crear una hoja de trabajo en el archivo de Excel
+    final sheet = excel['Sheet1'];
+
+    // Escribir los encabezados de columna en la hoja de trabajo
+    final headers = tableData.first.keys.toList();
+    for (var i = 0; i < headers.length; i++) {
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: i, rowIndex: 0))
+          .value = headers[i];
+    }
+
+    // Escribir los datos en la hoja de trabajo
+    for (var i = 0; i < tableData.length; i++) {
+      final row = tableData[i];
+      final values = row.values.toList();
+      for (var j = 0; j < values.length; j++) {
+        sheet
+            .cell(CellIndex.indexByColumnRow(columnIndex: j, rowIndex: i + 1))
+            .value = values[j].toString();
+      }
+    }
+
+    // Mostrar el diálogo de selección de carpeta
+    final outputPath = await FilePicker.platform.getDirectoryPath();
+
+    if (outputPath != null) {
+      // Obtener el directorio de documentos del dispositivo
+      final documentsDirectory = await getApplicationDocumentsDirectory();
+      final documentsPath = documentsDirectory.path;
+
+      // Crear la ruta de salida en la carpeta seleccionada
+      final outputDirectory =
+          Directory(path.join(documentsPath, 'ExcelOutput'));
+      await outputDirectory.create(recursive: true);
+      final excelPath = path.join(outputPath, '$name.xlsx');
+
+      // Guardar el archivo de Excel en la carpeta seleccionada
+      final excelBytes = excel.encode();
+      final excelFile = File(excelPath);
+      await excelFile.writeAsBytes(excelBytes!);
+      debugPrint('Tabla SQLite convertida a Excel: $excelPath');
+      // ignore: use_build_context_synchronously
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(
+            'MENSAJE',
+            style: TextStyle(color: Colors.blue.shade900),
+          ),
+          content: Text(
+            'SE GUARDO EXITOSAMENTE',
+            style: TextStyle(color: Colors.blue.shade900),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blue.shade900,
+                shape: const StadiumBorder(),
+                padding: const EdgeInsets.all(16.0),
+              ),
+              child: const Text(
+                'ACEPTAR',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      debugPrint('No se seleccionó ninguna carpeta.');
+    }
   }
 }
