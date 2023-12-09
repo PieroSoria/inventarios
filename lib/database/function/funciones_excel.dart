@@ -67,7 +67,15 @@ class ExcelFuncion {
         precio TEXT,
         stock_inicial TEXT,
         conteo TEXT,
-        diferencia TEXT
+        diferencia TEXT,
+        ubicacion TEXT,
+        sububicacion TEXT,
+        lote TEXT,
+        num_lote TEXT,
+        fecha_pro TEXT,
+        fecha_cad TEXT,
+        serie TEXT,
+        num_serie TEXT
       )
     ''');
     }
@@ -97,7 +105,15 @@ class ExcelFuncion {
           precio: precio,
           stock: stock,
           conteo: conteo,
-          diferencia: diferencia);
+          diferencia: diferencia,
+          ubicacion: '',
+          sububicacion: '',
+          lote: '',
+          numlote: '',
+          fechapro: '',
+          fechacad: '',
+          serie: '',
+          numserie: '');
 
       await insertarProductos(productos, basedatos);
     }
@@ -204,7 +220,6 @@ class ExcelFuncion {
     final outputPath = await FilePicker.platform.getDirectoryPath();
 
     if (outputPath != null) {
-      // Obtener el directorio de documentos del dispositivo
       final documentsDirectory = await getApplicationDocumentsDirectory();
       final documentsPath = documentsDirectory.path;
 

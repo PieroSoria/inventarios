@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:inventarios/connection/function/usertoken.dart';
 import 'package:inventarios/database/createdb/database.dart';
 import 'package:inventarios/models/productos/almacen.dart';
+import 'package:inventarios/models/productos/ubicacioneslet.dart';
 import 'package:inventarios/settings/token.dart';
 
 class Controller extends GetxController {
@@ -14,16 +15,23 @@ class Controller extends GetxController {
   RxString apellidouser = "".obs;
   RxBool loginanregis = false.obs;
   RxList<Almacenes> almacenes = <Almacenes>[].obs;
+  RxList<Ubicacioneslet> ubicacion = <Ubicacioneslet>[].obs;
 
-  Future<void> getAllProducts({String? searchText}) async {
-    String query = "SELECT * FROM almacenes";
+  Future<void> getAllProducts(String table, {String? searchText}) async {
+    String query = "SELECT * FROM $table";
     if (searchText != null && searchText.isNotEmpty) {
       query += " WHERE nombre LIKE '%$searchText%'";
     }
-    List<Map<String, dynamic>> products = await funciones.getdata(query);
-    almacenes.assignAll(
-      products.map((map) => Almacenes.fromMap(map)).toList(),
-    );
+    if (table == "almacenes") {
+      List<Map<String, dynamic>> products = await funciones.getdata(query);
+      almacenes.assignAll(
+        products.map((map) => Almacenes.fromMap(map)).toList(),
+      );
+    } else if (table == "ubicaciones") {
+      List<Map<String, dynamic>> products = await funciones.getdata(query);
+      ubicacion.assignAll(
+          products.map((map) => Ubicacioneslet.fromMap(map)).toList());
+    }
   }
 
   Future<void> usardatonombre() async {

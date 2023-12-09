@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inventarios/controller/controller.dart';
 import 'package:inventarios/database/function/funciones_basicas.dart';
+import 'package:inventarios/models/productos/productos.dart';
+
+import 'actualizarproduct.dart';
 
 class Consulta extends StatefulWidget {
   const Consulta({super.key});
@@ -55,7 +58,6 @@ class _ConsultaState extends State<Consulta> {
     _selectedItem = dropdownItems.first;
     selectalmacen.text = _selectedItem.toString();
     getAllProducts(selectalmacen: _selectedItem!);
-    controller.usardatonombre();
   }
 
   @override
@@ -163,21 +165,76 @@ class _ConsultaState extends State<Consulta> {
                                             "${listproducts[index]['descripcion']}"),
                                       ],
                                     ),
-                                    trailing: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
+                                    trailing: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Text(
-                                          "Conteo: ${listproducts[index]['conteo']}",
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(fontSize: 11),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              "Conteo: ${listproducts[index]['conteo']}",
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  const TextStyle(fontSize: 11),
+                                            ),
+                                            Text(
+                                              "Stock Teorico: ${listproducts[index]['stock_inicial']}",
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  const TextStyle(fontSize: 11),
+                                            ),
+                                          ],
                                         ),
-                                        Text(
-                                          "Stock Teorico: ${listproducts[index]['stock_inicial']}",
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(fontSize: 11),
-                                        ),
+                                        IconButton(
+                                            onPressed: () async {
+                                              String? tabla = await funciones
+                                                  .obtenerNombreInventarioActivo();
+                                              final pro = Productos(
+                                                  id: listproducts[index]['id'],
+                                                  codigo: listproducts[index]
+                                                      ['codigo'],
+                                                  codbarra: listproducts[index]
+                                                      ['codbarra'],
+                                                  descripcion: listproducts[index]
+                                                      ['descripcion'],
+                                                  medida: listproducts[index]
+                                                      ['medida'],
+                                                  categoria: listproducts[index]
+                                                      ['categoria'],
+                                                  precio: listproducts[index]
+                                                      ['precio'],
+                                                  stock: listproducts[index]
+                                                      ['stock_inicial'],
+                                                  conteo: listproducts[index]
+                                                      ['conteo'],
+                                                  diferencia: listproducts[index]
+                                                      ['diferencia'],
+                                                  ubicacion: listproducts[index]
+                                                      ['ubicacion'],
+                                                  sububicacion: listproducts[index]
+                                                      ['sububicacion'],
+                                                  lote: listproducts[index]
+                                                      ['lote'],
+                                                  numlote: listproducts[index]
+                                                      ['num_lote'],
+                                                  fechapro: listproducts[index]
+                                                      ['fecha_pro'],
+                                                  fechacad: listproducts[index]['fecha_cad'],
+                                                  serie: listproducts[index]['serie'],
+                                                  numserie: listproducts[index]['num_serie']);
+                                              if (tabla != null) {
+                                                Get.to(() => ActualizarPro(
+                                                      productos: pro,
+                                                      tabla: tabla,
+                                                    ));
+                                              }
+                                            },
+                                            icon: Icon(
+                                              Icons.edit,
+                                              color: Colors.blue.shade900,
+                                            ))
                                       ],
                                     ),
                                   ),

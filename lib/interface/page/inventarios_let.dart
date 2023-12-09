@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:inventarios/components/btnform.dart';
 import 'package:inventarios/controller/controller.dart';
 import 'package:inventarios/database/function/funciones_basicas.dart';
 import 'package:inventarios/database/function/funciones_excel.dart';
+import 'package:inventarios/interface/routes/routes.dart';
 
 import '../../database/createdb/database.dart';
 
@@ -71,24 +73,21 @@ class _InventarioState extends State<Inventario> {
             onRefresh: refreshdata,
             child: Column(
               children: [
-                const SizedBox(
-                  height: 120,
-                ),
-                Row(
-                  children: [
-                    Obx(
-                      () => Text(
-                        controller.nombreuser.value,
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue.shade900),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 120, 0, 20),
+                  child: Row(
+                    children: [
+                      Obx(
+                        () => Text(
+                          controller.nombreuser.value,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue.shade900),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 DropdownButton<String>(
                   isExpanded: true,
@@ -175,24 +174,12 @@ class _InventarioState extends State<Inventario> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.blue.shade900,
-                        shape: const StadiumBorder(),
-                        padding: const EdgeInsets.all(16.0),
-                      ),
-                      child: const SizedBox(
-                        child: Text(
-                          'CANCELAR',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 15, color: Colors.white),
-                        ),
-                      ),
-                    ),
+                    Btnform(
+                        funcion: () {
+                          Get.toNamed(Routes.inicio);
+                        },
+                        label: "CANCELAR",
+                        color: Colors.blue.shade900)
                   ],
                 ),
               ],

@@ -4,43 +4,39 @@ import 'package:inventarios/interface/routes/app_routes.dart';
 import 'package:inventarios/interface/routes/routes.dart';
 import 'package:inventarios/settings/token.dart';
 
-void main() {
+late bool ini;
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  ini = await tokendata();
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: tokendata(),
-        builder: (context, snapshot) {
-          if (snapshot.data == true) {
-            return GetMaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Inventarios',
-              initialRoute: Routes.inicio,
-              routes: appRoutes,
-            );
-          } else {
-            return GetMaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Inventarios',
-              initialRoute: Routes.home,
-              routes: appRoutes,
-            );
-          }
-        });
-  }
+  State<MyApp> createState() => _MyAppState();
+}
 
-  Future<bool> tokendata() async {
-    final x = TokenGet();
-    String token = await x.usartoken();
-    if(token.isNotEmpty){
-      return true;
-    }else{
-      return false;
-    }
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Inventarios',
+      initialRoute: ini == false ? Routes.home : Routes.inicio,
+      routes: appRoutes,
+    );
+  }
+}
+
+Future<bool> tokendata() async {
+  final x = TokenGet();
+  String token = await x.usartoken();
+  debugPrint(token);
+  if (token != "") {
+    return true;
+  } else {
+    return false;
   }
 }

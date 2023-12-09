@@ -8,7 +8,15 @@ class Productos {
       precio,
       stock,
       conteo,
-      diferencia;
+      diferencia,
+      ubicacion,
+      sububicacion,
+      lote,
+      numlote,
+      fechapro,
+      fechacad,
+      serie,
+      numserie;
   Productos(
       {required this.id,
       required this.codigo,
@@ -19,7 +27,15 @@ class Productos {
       required this.precio,
       required this.stock,
       required this.conteo,
-      required this.diferencia});
+      required this.diferencia,
+      required this.ubicacion,
+      required this.sububicacion,
+      required this.lote,
+      required this.numlote,
+      required this.fechapro,
+      required this.fechacad,
+      required this.serie,
+      required this.numserie});
   Map<String, dynamic> toMap2() {
     return {
       'id': id,
@@ -31,21 +47,38 @@ class Productos {
       'precio': precio,
       'stock_inicial': stock,
       'conteo': conteo,
-      'diferencia': diferencia
+      'diferencia': diferencia,
+      'ubicacion': ubicacion,
+      'sububicacion': sububicacion,
+      'lote': lote,
+      'num_lote': numlote,
+      'fecha_pro': fechapro,
+      'fecha_cad': fechacad,
+      'serie': serie,
+      'num_serie': numserie,
     };
   }
 
   factory Productos.fromMap(Map<String, dynamic> map2) {
     return Productos(
-        id: map2['id'] ?? "",
-        codigo: map2['codigo'] ?? "",
-        codbarra: map2['codbarra'] ?? "",
-        descripcion: map2['descripcion'] ?? "",
-        medida: map2['medida'] ?? "",
-        categoria: map2['categoria'] ?? "",
-        precio: map2['precio'] ?? "",
-        stock: map2['stock_inicial'] ?? "",
-        conteo: map2['conteo'] ?? "",
-        diferencia: map2['diferencia'] ?? "");
+      id: map2['id'] ?? "",
+      codigo: map2['codigo'] ?? "",
+      codbarra: map2['codbarra'] ?? "",
+      descripcion: map2['descripcion'] ?? "",
+      medida: map2['medida'] ?? "",
+      categoria: map2['categoria'] ?? "",
+      precio: map2['precio'] ?? "",
+      stock: map2['stock_inicial'] ?? "",
+      conteo: map2['conteo'] ?? "",
+      diferencia: map2['diferencia'] ?? "",
+      ubicacion: map2['ubicacion'] ?? "",
+      sububicacion: map2['sububicacion'] ?? "",
+      lote: map2['lote'] ?? "",
+      numlote: map2['num_lote'] ?? "",
+      fechapro: map2['fecha_pro'] ?? "",
+      fechacad: map2['fecha_cad'] ?? "",
+      serie: map2['serie'] ?? "",
+      numserie: map2['num_serie'] ?? "",
+    );
   }
 }

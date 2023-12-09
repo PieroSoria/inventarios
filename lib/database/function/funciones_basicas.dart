@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventarios/database/createdb/database.dart';
+import 'package:inventarios/models/productos/ubicacioneslet.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../models/productos/almacen.dart';
@@ -23,11 +24,21 @@ class FuncionesBasic {
       return false;
     }
   }
+  Future<bool> insertubicacion(Ubicacioneslet ubi) async {
+    try {
+      Database? mydb = await funciones.db;
+      await mydb!.insert('ubicaciones', ubi.toMap3());
+      return true;
+    } catch (e) {
+      debugPrint("Error al insertar en la base de datos: $e");
+      return false;
+    }
+  }
 
-  Future<double> getNext3() async {
+  Future<double> getNext3(String table) async {
     Database? mydb = await funciones.db;
     final List<Map<String, dynamic>> result = await mydb!.query(
-      'almacenes',
+      table,
       columns: ['id'],
       orderBy: 'id DESC',
       limit: 1,

@@ -89,7 +89,7 @@ class _GuardainventarioState extends State<Guardainventario> {
                                   "Error", "Opps!! ocurrio un problema");
                             }
                           },
-                          label: "CERRAR EL INVENTARIO"),
+                          label: "CERRAR EL INVENTARIO", color: Colors.blue.shade900,),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -102,7 +102,7 @@ class _GuardainventarioState extends State<Guardainventario> {
                               Get.toNamed(Routes.home);
                             }
                           },
-                          label: "Cerrar Session"),
+                          label: "Cerrar Session", color: Colors.blue.shade900,),
                     ),
                   ],
                 )

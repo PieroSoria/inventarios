@@ -28,6 +28,7 @@ class SQLdb {
         'CREATE TABLE IF NOT EXISTS inventarios (id REAL PRIMARY KEY, nombre TEXT,basedatos TEXT, almacen TEXT, activo TEXT,fecha TEXT)');
     await db.execute(
         'CREATE TABLE IF NOT EXISTS almacenes (id REAL PRIMARY KEY, nombre TEXT)');
+    await db.execute('CREATE TABLE IF NOT EXISTS ubicaciones (id REAL PRIMARY KEY, ubicacion TEXT,sububicacion TEXT)');
     debugPrint(
         "==================base de datos creada =======================");
   }

@@ -48,7 +48,6 @@ class _ImportdataState extends State<Importdata> {
   Future<void> initDropdownItems() async {
     dropdownItems = await sqLdb.captureData();
     setState(() {
-      // Set the initial selected item
       if (dropdownItems.isNotEmpty) {
         _selectedItem = dropdownItems.first;
       }
@@ -73,7 +72,6 @@ class _ImportdataState extends State<Importdata> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // ignore: avoid_unnecessary_containers
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -82,76 +80,73 @@ class _ImportdataState extends State<Importdata> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               mainAxisSize: MainAxisSize.max,
               children: [
-                const SizedBox(
-                  height: 60,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Obx(
-                      () => Text(
-                        controller.nombreuser.value,
+                Padding(
+                  padding: const EdgeInsets.only(top: 60),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Obx(
+                        () => Text(
+                          controller.nombreuser.value,
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue.shade900),
+                        ),
+                      ),
+                      Text(
+                        _currentDateTime,
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.blue.shade900),
                       ),
-                    ),
-                    Text(
-                      _currentDateTime,
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue.shade900),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                DropdownButton<String>(
-                  isExpanded: true,
-                  value: _selectedItem,
-                  items: dropdownItems.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Center(child: Text(item)),
-                    );
-                  }).toList(),
-                  onChanged: (String? selectedItem) {
-                    if (dropdownItems.contains(selectedItem)) {
-                      setState(() {
-                        _selectedItem = selectedItem!;
-                        selectalmacen.text = _selectedItem.toString();
-                      });
-                    }
-                  },
-                  style: TextStyle(color: Colors.blue.shade900, fontSize: 18),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextField(
-                  controller: _tableNameController,
-                  style: TextStyle(fontSize: 20, color: Colors.blue.shade900),
-                  decoration: InputDecoration(
-                    labelText: 'Ingrese nombre del inventario',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20)),
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  _selectedFileName, // Mostrar el nombre del archivo seleccionado
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 30),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    value: _selectedItem,
+                    items: dropdownItems.map((String item) {
+                      return DropdownMenuItem<String>(
+                        value: item,
+                        child: Center(child: Text(item)),
+                      );
+                    }).toList(),
+                    onChanged: (String? selectedItem) {
+                      if (dropdownItems.contains(selectedItem)) {
+                        setState(() {
+                          _selectedItem = selectedItem!;
+                          selectalmacen.text = _selectedItem.toString();
+                        });
+                      }
+                    },
+                    style: TextStyle(color: Colors.blue.shade900, fontSize: 18),
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: TextField(
+                    controller: _tableNameController,
+                    style: TextStyle(fontSize: 20, color: Colors.blue.shade900),
+                    decoration: InputDecoration(
+                      labelText: 'Ingrese nombre del inventario',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Text(
+                    _selectedFileName, // Mostrar el nombre del archivo seleccionado
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 Btnform(
                   funcion: () async {
@@ -171,6 +166,7 @@ class _ImportdataState extends State<Importdata> {
                     }
                   },
                   label: 'BUSCAR EXCEL',
+                  color: Colors.blue.shade900,
                 ),
                 const SizedBox(
                   height: 20,
