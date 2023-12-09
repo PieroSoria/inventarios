@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:inventarios/controller/controller.dart';
 import 'package:inventarios/database/createdb/database.dart';
 import 'package:inventarios/database/function/funciones_basicas.dart';
 
@@ -12,6 +14,7 @@ class Conteo extends StatefulWidget {
 class _ConteoState extends State<Conteo> {
   SQLdb sqLdb = SQLdb();
   FuncionesBasic funciones = FuncionesBasic();
+  final controller = Get.put(Controller());
   List<Map<String, dynamic>> resultados = [];
   TextEditingController buscarController = TextEditingController();
   TextEditingController stockController = TextEditingController(text: '0');
@@ -123,12 +126,14 @@ class _ConteoState extends State<Conteo> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text(
-                      "widget.widget.user",
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue.shade900),
+                    Obx(
+                      ()=> Text(
+                        controller.nombreuser.value,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue.shade900),
+                      ),
                     ),
                     Row(
                       children: [

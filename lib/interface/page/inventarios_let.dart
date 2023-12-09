@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:inventarios/controller/controller.dart';
 import 'package:inventarios/database/function/funciones_basicas.dart';
 import 'package:inventarios/database/function/funciones_excel.dart';
 
@@ -13,6 +15,7 @@ class Inventario extends StatefulWidget {
 
 class _InventarioState extends State<Inventario> {
   ExcelFuncion excelFuncion = ExcelFuncion();
+  final controller = Get.put(Controller());
   TextEditingController selectalmacen = TextEditingController();
   SQLdb sqLdb = SQLdb();
   String? _selectedItem;
@@ -73,13 +76,15 @@ class _InventarioState extends State<Inventario> {
                 ),
                 Row(
                   children: [
-                    Text(
-                      "widget.widget.user",
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue.shade900),
-                    ),
+                    Obx(
+                      () => Text(
+                        controller.nombreuser.value,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue.shade900),
+                      ),
+                    )
                   ],
                 ),
                 const SizedBox(

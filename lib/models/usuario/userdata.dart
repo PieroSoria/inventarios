@@ -1,16 +1,18 @@
 class UserData {
-  String nombre, apellido, email, pass;
+  String nombre, apellido, email, pass, token;
   UserData(
       {required this.nombre,
       required this.apellido,
       required this.email,
-      required this.pass});
+      required this.pass,
+      required this.token});
   Map<String, dynamic> tomap() {
     return {
       'nombre': nombre,
       'apellido': apellido,
       'email': email,
       'pass': pass,
+      'token': token
     };
   }
 
@@ -20,6 +22,15 @@ class UserData {
       apellido: map['apellido'] ?? '',
       email: map['email'] ?? '',
       pass: map['pass'] ?? '',
+      token: map['token'] ?? '',
     );
   }
+
+  void assignAll() {}
+}
+
+class ResponsyUserData{
+  UserData? data; 
+  String? error;
+  ResponsyUserData(this.data,this.error);
 }

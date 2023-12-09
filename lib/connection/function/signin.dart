@@ -5,6 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:inventarios/connection/URL/url_direcction.dart';
 import 'package:inventarios/connection/dominio/dominio.dart';
 import 'package:inventarios/models/usuario/userdata.dart';
+import 'package:inventarios/settings/token.dart';
+
+TokenGet tokenfuncion = TokenGet();
 
 Future<bool> signinwithemailandpassword(UserData data) async {
   var cliente = http.Client();
@@ -21,19 +24,18 @@ Future<bool> signinwithemailandpassword(UserData data) async {
       if (responseInfo is List && responseInfo.isNotEmpty) {
         Get.snackbar("Success", "Inicio de sesión exitoso");
         debugPrint("ID: ${responseInfo[0]['id']}");
-        debugPrint("Nombre: ${responseInfo[0]['nombre']}");
+        debugPrint("token: ${responseInfo[0]['token']}");
+        tokenfuncion.guardartoken("${responseInfo[0]['token']}");
         return true;
       } else if (responseInfo[0].containsKey('mensaje')) {
         Get.snackbar("Error", "${responseInfo[0]['mensaje']}");
         return false;
       }
     } else {
-      // Manejar errores del servidor
-      Get.snackbar("Error", "Error en la comunicación con el servidor");
+      Get.snackbar("Error", "El usuario es invalido");
       return false;
     }
   } catch (e) {
-    // Manejar errores de red u otras excepciones
     Get.snackbar("Error", "Error en la comunicación con el servidor");
   } finally {
     cliente.close();

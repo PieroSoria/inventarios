@@ -88,12 +88,14 @@ class _ImportdataState extends State<Importdata> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      controller.imagenPath.value,
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue.shade900),
+                    Obx(
+                      () => Text(
+                        controller.nombreuser.value,
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue.shade900),
+                      ),
                     ),
                     Text(
                       _currentDateTime,

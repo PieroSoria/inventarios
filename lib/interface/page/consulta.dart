@@ -1,6 +1,8 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:inventarios/controller/controller.dart';
 import 'package:inventarios/database/function/funciones_basicas.dart';
 
 class Consulta extends StatefulWidget {
@@ -12,6 +14,7 @@ class Consulta extends StatefulWidget {
 
 class _ConsultaState extends State<Consulta> {
   TextEditingController selectalmacen = TextEditingController();
+  final controller = Get.put(Controller());
   FuncionesBasic funciones = FuncionesBasic();
   String? _selectedItem;
   TextEditingController searchController = TextEditingController();
@@ -52,13 +55,13 @@ class _ConsultaState extends State<Consulta> {
     _selectedItem = dropdownItems.first;
     selectalmacen.text = _selectedItem.toString();
     getAllProducts(selectalmacen: _selectedItem!);
+    controller.usardatonombre();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      // ignore: avoid_unnecessary_containers
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
         child: RefreshIndicator(
@@ -71,13 +74,15 @@ class _ConsultaState extends State<Consulta> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
-                    "widget.widget.user",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue.shade900),
+                  Obx(
+                    () => Text(
+                      controller.nombreuser.value,
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue.shade900),
+                    ),
                   ),
                 ],
               ),

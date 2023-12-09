@@ -1,7 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inventarios/components/btnform.dart';
+import 'package:inventarios/controller/controller.dart';
 import 'package:inventarios/interface/routes/routes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sqflite/sqflite.dart';
 
@@ -15,6 +18,7 @@ class Guardainventario extends StatefulWidget {
 }
 
 class _GuardainventarioState extends State<Guardainventario> {
+  final controller = Get.put(Controller());
   SQLdb sqLdb = SQLdb();
 
   Future<bool> cerrarinventario() async {
@@ -48,13 +52,15 @@ class _GuardainventarioState extends State<Guardainventario> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(bottom: 160),
-                      child: Text(
-                        "widget.widget.user",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue.shade900),
+                      child: Obx(
+                        () => Text(
+                          controller.nombreuser.value,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue.shade900),
+                        ),
                       ),
                     ),
                   ],
@@ -89,7 +95,12 @@ class _GuardainventarioState extends State<Guardainventario> {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Btnform(
                           funcion: () async {
-                            Get.offAllNamed(Routes.home);
+                            final SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            final resul = await prefs.remove('tokenuser');
+                            if (resul) {
+                              Get.toNamed(Routes.home);
+                            }
                           },
                           label: "Cerrar Session"),
                     ),

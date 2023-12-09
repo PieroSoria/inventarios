@@ -76,9 +76,10 @@ class _LoginState extends State<Login> {
                         nombre: '',
                         apellido: '',
                         email: email.text,
-                        pass: password.text);
+                        pass: password.text, token: '');
                     bool result = await signinwithemailandpassword(data);
-                    if(result){
+                    if (result) {
+                      
                       Get.toNamed(Routes.inicio);
                     }
                   },

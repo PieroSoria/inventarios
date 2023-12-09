@@ -29,6 +29,10 @@ class _RegistrarState extends State<Registrar> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Text('Registrar Usuario',style: TextStyle(fontFamily: "Poppins",fontSize: 20)),
+            ),
             CustomInputField(
               controller: nombre,
               label: "Nombre completo",
@@ -96,7 +100,7 @@ class _RegistrarState extends State<Registrar> {
                         nombre: nombre.text,
                         apellido: apellido.text,
                         email: email.text,
-                        pass: password.text);
+                        pass: password.text, token: '');
                     bool result = await signupwithemailandpassword(data);
                     if (result) {
                       Get.toNamed(Routes.home);
