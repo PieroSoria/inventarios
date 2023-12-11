@@ -75,7 +75,8 @@ class ExcelFuncion {
         fecha_pro TEXT,
         fecha_cad TEXT,
         serie TEXT,
-        num_serie TEXT
+        num_serie TEXT,
+        tdatos TEXT
       )
     ''');
     }
@@ -113,7 +114,8 @@ class ExcelFuncion {
           fechapro: '',
           fechacad: '',
           serie: '',
-          numserie: '');
+          numserie: '',
+          tdatos: basedatos);
 
       await insertarProductos(productos, basedatos);
     }

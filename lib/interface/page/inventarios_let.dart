@@ -8,14 +8,14 @@ import 'package:inventarios/interface/routes/routes.dart';
 
 import '../../database/createdb/database.dart';
 
-class Inventario extends StatefulWidget {
-  const Inventario({super.key});
+class InventarioIDE extends StatefulWidget {
+  const InventarioIDE({super.key});
 
   @override
-  State<Inventario> createState() => _InventarioState();
+  State<InventarioIDE> createState() => _InventarioIDEState();
 }
 
-class _InventarioState extends State<Inventario> {
+class _InventarioIDEState extends State<InventarioIDE> {
   ExcelFuncion excelFuncion = ExcelFuncion();
   final controller = Get.put(Controller());
   TextEditingController selectalmacen = TextEditingController();
@@ -34,7 +34,7 @@ class _InventarioState extends State<Inventario> {
   }
 
   Future<void> initDropdownItems() async {
-    dropdownItems = await funciones.captureData();
+    dropdownItems = await funciones.captureData("almacenes","nombre","SELECCIONAR ALMACEN",null);
     setState(() {
       // Set the initial selected item
       if (dropdownItems.isNotEmpty) {
@@ -110,14 +110,27 @@ class _InventarioState extends State<Inventario> {
                   style: TextStyle(color: Colors.blue.shade900, fontSize: 18),
                 ),
                 Expanded(
-                  flex: 11,
+                  flex: 6,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 12),
                     child: FutureBuilder(
                       future: getAllProducts(selectalmacen: selectalmacen.text),
                       builder: (ctx, snp) {
-                        if (snp.hasData) {
+                        if (snp.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
+                        } else if (snp.hasError) {
+                          return Center(child: Text('Error: ${snp.error}'));
+                        } else if (!snp.hasData || (snp.data as List).isEmpty) {
+                          return const Center(
+                            child: Text(
+                              "No se encontro ningun Inventario",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: "Poppins", fontSize: 25),
+                            ),
+                          );
+                        } else {
                           List<Map> listproducts = snp.data!;
                           return ListView.builder(
                               itemCount: listproducts.length,
@@ -162,10 +175,6 @@ class _InventarioState extends State<Inventario> {
                                   ),
                                 );
                               });
-                        } else {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
                         }
                       },
                     ),

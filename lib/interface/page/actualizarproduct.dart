@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:inventarios/controller/controller.dart';
+import 'package:inventarios/database/function/funciones_basicas.dart';
 import 'package:inventarios/interface/routes/routes.dart';
 import 'package:inventarios/models/productos/productos.dart';
 
@@ -35,6 +37,11 @@ class _ActualizarProState extends State<ActualizarPro> {
   final serie = TextEditingController();
   final numserie = TextEditingController();
 
+  FuncionesBasic funcioness = FuncionesBasic();
+  final controller = Get.put(Controller());
+  String _selectedItem = "SELECCIONAR UBICACION";
+  String _selectedItem2 = "SELECCIONAR SUBUBICACION";
+
   SQLdb funciones = SQLdb();
   @override
   void initState() {
@@ -55,8 +62,12 @@ class _ActualizarProState extends State<ActualizarPro> {
     fechacad.text = widget.productos.fechacad;
     serie.text = widget.productos.serie;
     numserie.text = widget.productos.numserie;
+    controller.initDropdownItemsubicacion();
+
     super.initState();
   }
+
+  bool loteyserie = false;
 
   @override
   Widget build(BuildContext context) {
@@ -95,43 +106,302 @@ class _ActualizarProState extends State<ActualizarPro> {
                   ),
                 ),
               ),
-              Btnform(
-                  funcion: () async {
-                    bool rep = await funciones.updatedata('''
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: TextField(
+                  controller: codbarra,
+                  style: TextStyle(fontSize: 20, color: Colors.blue.shade900),
+                  decoration: InputDecoration(
+                    labelText: 'codigo de barra',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: TextField(
+                  controller: descripcion,
+                  style: TextStyle(fontSize: 20, color: Colors.blue.shade900),
+                  decoration: InputDecoration(
+                    labelText: 'descripcion',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: TextField(
+                  controller: medida,
+                  style: TextStyle(fontSize: 20, color: Colors.blue.shade900),
+                  decoration: InputDecoration(
+                    labelText: 'medida',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: TextField(
+                  controller: categoria,
+                  style: TextStyle(fontSize: 20, color: Colors.blue.shade900),
+                  decoration: InputDecoration(
+                    labelText: 'categoria',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: TextField(
+                  controller: precio,
+                  style: TextStyle(fontSize: 20, color: Colors.blue.shade900),
+                  decoration: InputDecoration(
+                    labelText: 'precio',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: TextField(
+                  controller: stock,
+                  style: TextStyle(fontSize: 20, color: Colors.blue.shade900),
+                  decoration: InputDecoration(
+                    labelText: 'stock inicial',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: TextField(
+                  controller: conteo,
+                  style: TextStyle(fontSize: 20, color: Colors.blue.shade900),
+                  decoration: InputDecoration(
+                    labelText: 'conteo',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: TextField(
+                  controller: diferencia,
+                  style: TextStyle(fontSize: 20, color: Colors.blue.shade900),
+                  decoration: InputDecoration(
+                    labelText: 'diferencia',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Obx(
+                  () => DropdownButton<dynamic>(
+                    isExpanded: true,
+                    value: _selectedItem,
+                    items: controller.dropdownitemubicacion.map((dynamic item) {
+                      return DropdownMenuItem<dynamic>(
+                        value: item,
+                        child: Center(child: Text(item.toString())),
+                      );
+                    }).toList(),
+                    onChanged: (dynamic selectedItem) {
+                      setState(() {
+                        _selectedItem = selectedItem;
+                        ubicacion.text = _selectedItem.toString();
+                        _selectedItem2 = "SELECCIONAR SUBUBICACION";
+                        controller.initDropdownItemssububicacion(selectedItem);
+                      });
+                    },
+                    style: TextStyle(color: Colors.blue.shade900, fontSize: 18),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Obx(
+                  () => DropdownButton<dynamic>(
+                    isExpanded: true,
+                    value: _selectedItem2,
+                    items:
+                        controller.dropdownitemsububicacion.map((dynamic item) {
+                      return DropdownMenuItem<dynamic>(
+                          value: item,
+                          child: Center(child: Text(item.toString())));
+                    }).toList(),
+                    onChanged: (dynamic selectedItem) {
+                      setState(() {
+                        _selectedItem2 = selectedItem;
+                        sububicacion.text = _selectedItem2.toString();
+                      });
+                    },
+                    style: TextStyle(color: Colors.blue.shade900, fontSize: 18),
+                  ),
+                ),
+              ),
+              SizedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text("LOTE"),
+                    ),
+                    Switch(
+                        value: loteyserie,
+                        onChanged: (bool value) {
+                          setState(() {
+                            loteyserie = value;
+                          });
+                        }),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text("SERIE"),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                child: loteyserie == false
+                    ? Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: TextField(
+                              controller: lote,
+                              style: TextStyle(
+                                  fontSize: 20, color: Colors.blue.shade900),
+                              decoration: InputDecoration(
+                                labelText: 'lote',
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: TextField(
+                              controller: numlote,
+                              style: TextStyle(
+                                  fontSize: 20, color: Colors.blue.shade900),
+                              decoration: InputDecoration(
+                                labelText: 'numero de lote',
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: TextField(
+                              controller: fechapro,
+                              style: TextStyle(
+                                  fontSize: 20, color: Colors.blue.shade900),
+                              decoration: InputDecoration(
+                                labelText: 'fecha de produccion',
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: TextField(
+                              controller: fechacad,
+                              style: TextStyle(
+                                  fontSize: 20, color: Colors.blue.shade900),
+                              decoration: InputDecoration(
+                                labelText: 'fecha de caducidad',
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: TextField(
+                              controller: serie,
+                              style: TextStyle(
+                                  fontSize: 20, color: Colors.blue.shade900),
+                              decoration: InputDecoration(
+                                labelText: 'serie',
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: TextField(
+                              controller: numserie,
+                              style: TextStyle(
+                                  fontSize: 20, color: Colors.blue.shade900),
+                              decoration: InputDecoration(
+                                labelText: 'numero de serie',
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Btnform(
+                    funcion: () async {
+                      bool rep = await funciones.updatedata('''
                   UPDATE ${widget.tabla} SET
-                  codigo = "${codigo.text}",
-                  codbarra = "${codbarra.text}",
-                  descripcion = "${descripcion.text}",
-                  medida = "${medida.text}",
-                  categoria = "${categoria.text}",
-                  precio = "${precio.text}",
-                  stock_inicial = "${stock.text}",
-                  conteo = "${conteo.text}",
-                  diferencia = "${diferencia.text}",
-                  ubicacion = "${ubicacion.text}",
-                  sububicacion = "${sububicacion.text}",
-                  lote = "${lote.text}",
-                  num_lote = "${numlote.text}",
-                  fecha_pro = "${fechapro.text}",
-                  fecha_cad = "${fechacad.text}",
-                  serie = "${serie.text}",
-                  num_serie = "${numserie.text}",
-                  WHERE id = "${widget.productos.id}"
-                  ''');
-                    if (rep) {
-                      Get.snackbar(
-                          "Exito", "Se actualizo correctamente el almacen");
-                      Get.toNamed(Routes.inicio);
-                    }
-                  },
-                  label: "MODIFICAR ALMACEN",
-                  color: Colors.blue.shade900),
-              Btnform(
-                  funcion: () {
-                    Navigator.of(context).pop();
-                  },
-                  label: "CANCELAR",
-                  color: Colors.blue.shade900)
+                    codigo = "${codigo.text}",
+                    codbarra = "${codbarra.text}",
+                    descripcion = "${descripcion.text}",
+                    medida = "${medida.text}",
+                    categoria = "${categoria.text}",
+                    precio = "${precio.text}",
+                    stock_inicial = "${stock.text}",
+                    conteo = "${conteo.text}",
+                    diferencia = "${diferencia.text}",
+                    ubicacion = "${ubicacion.text}",
+                    sububicacion = "${sububicacion.text}",
+                    lote = "${lote.text}",
+                    num_lote = "${numlote.text}",
+                    fecha_pro = "${fechapro.text}",
+                    fecha_cad = "${fechacad.text}",
+                    serie = "${serie.text}",
+                    num_serie = "${numserie.text}",
+                    WHERE id = "${widget.productos.id}"
+                    ''');
+                      if (rep) {
+                        Get.snackbar(
+                            "Exito", "Se actualizo correctamente el almacen");
+                        Get.toNamed(Routes.inicio);
+                      }
+                    },
+                    label: "MODIFICAR ALMACEN",
+                    color: Colors.blue.shade900),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Btnform(
+                    funcion: () {
+                      Navigator.of(context).pop();
+                    },
+                    label: "CANCELAR",
+                    color: Colors.blue.shade900),
+              )
             ],
           ),
         ),

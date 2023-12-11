@@ -76,11 +76,14 @@ class _LoginState extends State<Login> {
                         nombre: '',
                         apellido: '',
                         email: email.text,
-                        pass: password.text, token: '');
+                        pass: password.text,
+                        token: '');
                     bool result = await signinwithemailandpassword(data);
                     if (result) {
-                      
                       Get.toNamed(Routes.inicio);
+                    } else {
+                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).pop();
                     }
                   },
                   style: ElevatedButton.styleFrom(

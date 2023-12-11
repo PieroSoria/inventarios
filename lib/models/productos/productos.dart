@@ -16,7 +16,7 @@ class Productos {
       fechapro,
       fechacad,
       serie,
-      numserie;
+      numserie,tdatos;
   Productos(
       {required this.id,
       required this.codigo,
@@ -35,7 +35,7 @@ class Productos {
       required this.fechapro,
       required this.fechacad,
       required this.serie,
-      required this.numserie});
+      required this.numserie,required this.tdatos});
   Map<String, dynamic> toMap2() {
     return {
       'id': id,
@@ -56,6 +56,7 @@ class Productos {
       'fecha_cad': fechacad,
       'serie': serie,
       'num_serie': numserie,
+      'tdatos':tdatos
     };
   }
 
@@ -78,7 +79,7 @@ class Productos {
       fechapro: map2['fecha_pro'] ?? "",
       fechacad: map2['fecha_cad'] ?? "",
       serie: map2['serie'] ?? "",
-      numserie: map2['num_serie'] ?? "",
+      numserie: map2['num_serie'] ?? "", tdatos: map2['tdatos'],
     );
   }
 }

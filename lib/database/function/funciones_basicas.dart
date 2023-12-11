@@ -24,6 +24,7 @@ class FuncionesBasic {
       return false;
     }
   }
+
   Future<bool> insertubicacion(Ubicacioneslet ubi) async {
     try {
       Database? mydb = await funciones.db;
@@ -58,16 +59,60 @@ class FuncionesBasic {
     return rows.isNotEmpty;
   }
 
-  Future<List<String>> captureData() async {
+  Future<List<String>> captureData(
+      String tabla, String columna, String itempri, String? where) async {
     Database? mydb = await funciones.db;
-    List<Map> result = await mydb!.query('almacenes', columns: ['nombre']);
-    List<String> nombres = [];
-    nombres.add("SELECCIONAR ALMACEN");
-    for (var item in result) {
-      nombres.add(item['nombre']);
+    if (where != null) {
+      List<Map> result = await mydb!
+          .query(tabla, columns: [columna], where: "ubicacion = '$where'");
+      Set<String> nombres = {itempri};
+      for (var item in result) {
+        nombres.add(item[columna]);
+      }
+      return nombres.toList();
+    } else {
+      List<Map> result = await mydb!.query(tabla, columns: [columna]);
+      Set<String> nombres = {itempri};
+      for (var item in result) {
+        nombres.add(item[columna]);
+      }
+      return nombres.toList();
     }
-    return nombres;
   }
+
+  // Future<List<String>> captureData(
+  //     String tabla, String columna, String itempri, String? where) async {
+  //   Database? mydb = await funciones.db;
+
+  //   if (where != null) {
+  //     List<Map> result = await mydb!
+  //         .query(tabla, columns: [columna], where: "ubicacion = '$where'");
+
+  //     // Utilizar un conjunto para almacenar valores únicos
+  //     Set<String> uniqueValues = {itempri};
+  //     for (var item in result) {
+  //       uniqueValues.add(item[columna]);
+  //     }
+
+  //     // Convertir el conjunto a una lista
+  //     List<String> nombres = List.from(uniqueValues);
+
+  //     return nombres;
+  //   } else {
+  //     List<Map> result = await mydb!.query(tabla, columns: [columna]);
+
+  //     // Utilizar un conjunto para almacenar valores únicos
+  //     Set<String> uniqueValues = {itempri};
+  //     for (var item in result) {
+  //       uniqueValues.add(item[columna]);
+  //     }
+
+  //     // Convertir el conjunto a una lista
+  //     List<String> nombres = List.from(uniqueValues);
+
+  //     return nombres;
+  //   }
+  // }
 
   Future<String?> obtenerNombreInventarioActivo() async {
     Database? mydb = await funciones.db;

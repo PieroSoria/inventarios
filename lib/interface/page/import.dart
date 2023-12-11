@@ -46,7 +46,7 @@ class _ImportdataState extends State<Importdata> {
   }
 
   Future<void> initDropdownItems() async {
-    dropdownItems = await sqLdb.captureData();
+    dropdownItems = await sqLdb.captureData("almacenes", "nombre","SELECCIONAR ALMACEN",null);
     setState(() {
       if (dropdownItems.isNotEmpty) {
         _selectedItem = dropdownItems.first;

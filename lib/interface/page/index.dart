@@ -1,5 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:inventarios/controller/controller.dart';
 import 'package:inventarios/interface/page/consulta.dart';
 
 import 'package:inventarios/interface/page/dashboard.dart';
@@ -20,13 +22,14 @@ class Index extends StatefulWidget {
 }
 
 class _IndexState extends State<Index> {
+  final controller = Get.put(Controller());
   late Widget _currentWidget;
 
   String? widgetapp;
   @override
   void initState() {
     super.initState();
-
+    controller.usardatonombre();
     _currentWidget = widget.selectcurrentwidget;
   }
 
@@ -68,7 +71,7 @@ class _IndexState extends State<Index> {
             } else if (index == 3) {
               _currentWidget = const Conteo();
             } else if (index == 4) {
-              _currentWidget = const Inventario();
+              _currentWidget = const InventarioIDE();
             } else if (index == 5) {
               _currentWidget = const Guardainventario();
             }

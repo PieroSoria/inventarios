@@ -120,65 +120,62 @@ class _ConteoState extends State<Conteo> {
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
             child: Column(
               children: [
-                const SizedBox(
-                  height: 60,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Obx(
-                      ()=> Text(
-                        controller.nombreuser.value,
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue.shade900),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 60, 0, 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Obx(
+                        () => Text(
+                          controller.nombreuser.value,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue.shade900),
+                        ),
                       ),
-                    ),
-                    Row(
-                      children: [
-                        const Text("Barrido"),
-                        Switch(
-                            value: _switchValue,
-                            onChanged: (bool value) {
-                              setState(() {
-                                _switchValue = value;
-                                _focusNode = FocusNode();
-                                _focusNode.requestFocus();
-                              });
-                            }),
-                        const Text("manual")
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextField(
-                  controller: buscarController,
-                  focusNode: _focusNode,
-                  onSubmitted: (value) async {
-                    if (_switchValue == false) {
-                      sumarconteo(value);
-                    } else {
-                      buscarProducto(value);
-                    }
-                    buscarController.text = '';
-                    setState(() {
-                      _focusNode = FocusNode();
-                      _focusNode.requestFocus();
-                    });
-                  },
-                  style: TextStyle(fontSize: 20, color: Colors.blue.shade900),
-                  decoration: InputDecoration(
-                    labelText: 'Ingrese código de barras',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20)),
+                      Row(
+                        children: [
+                          const Text("Barrido"),
+                          Switch(
+                              value: _switchValue,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _switchValue = value;
+                                  _focusNode = FocusNode();
+                                  _focusNode.requestFocus();
+                                });
+                              }),
+                          const Text("manual")
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: TextField(
+                    controller: buscarController,
+                    focusNode: _focusNode,
+                    onSubmitted: (value) async {
+                      if (_switchValue == false) {
+                        sumarconteo(value);
+                      } else {
+                        buscarProducto(value);
+                      }
+                      buscarController.text = '';
+                      setState(() {
+                        _focusNode = FocusNode();
+                        _focusNode.requestFocus();
+                      });
+                    },
+                    style: TextStyle(fontSize: 20, color: Colors.blue.shade900),
+                    decoration: InputDecoration(
+                      labelText: 'Ingrese código de barras',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: 200,
@@ -189,33 +186,37 @@ class _ConteoState extends State<Conteo> {
                       Map<String, dynamic> resultado = resultados[index];
                       return ListBody(
                         children: [
-                          const SizedBox(
-                            height: 10,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                                "Código de Barras: ${resultado['codbarra']}"),
                           ),
-                          Text("Código de Barras: ${resultado['codbarra']}"),
-                          const SizedBox(
-                            height: 10,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text("Categoría: ${resultado['categoria']}"),
                           ),
-                          Text("Categoría: ${resultado['categoria']}"),
-                          const SizedBox(
-                            height: 10,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                                "Nombre del Producto: ${resultado['descripcion']}"),
                           ),
-                          Text(
-                              "Nombre del Producto: ${resultado['descripcion']}"),
-                          Text("Medida: ${resultado['medida']}"),
-                          const SizedBox(
-                            height: 10,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text("Medida: ${resultado['medida']}"),
                           ),
-                          Text(
-                            "Stock Teórico: ${resultado['stock_inicial']}",
-                            style: const TextStyle(fontSize: 18),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              "Stock Teórico: ${resultado['stock_inicial']}",
+                              style: const TextStyle(fontSize: 18),
+                            ),
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            "Conteo: ${resultado['conteo']}",
-                            style: const TextStyle(fontSize: 18),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              "Conteo: ${resultado['conteo']}",
+                              style: const TextStyle(fontSize: 18),
+                            ),
                           ),
                         ],
                       );
@@ -272,7 +273,6 @@ class _ConteoState extends State<Conteo> {
                 ),
                 SizedBox(
                   width: 90,
-                  height: 50,
                   child: TextField(
                     controller: stockController,
                     style: const TextStyle(

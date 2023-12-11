@@ -21,14 +21,14 @@ Future<bool> signinwithemailandpassword(UserData data) async {
     if (response.statusCode == 200) {
       var responseInfo = json.decode(response.body);
 
-      if (responseInfo is List && responseInfo.isNotEmpty) {
+      if (responseInfo is List && responseInfo[0].containsKey('id')) {
         Get.snackbar("Success", "Inicio de sesión exitoso");
         debugPrint("ID: ${responseInfo[0]['id']}");
         debugPrint("token: ${responseInfo[0]['token']}");
         tokenfuncion.guardartoken("${responseInfo[0]['token']}");
         return true;
       } else if (responseInfo[0].containsKey('mensaje')) {
-        Get.snackbar("Error", "${responseInfo[0]['mensaje']}");
+        Get.snackbar("Error", "Usuario invalido ${responseInfo[0]['mensaje']}");
         return false;
       }
     } else {

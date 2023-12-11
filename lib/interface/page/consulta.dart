@@ -70,26 +70,23 @@ class _ConsultaState extends State<Consulta> {
           onRefresh: refreshData,
           child: Column(
             children: [
-              const SizedBox(
-                height: 60,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Obx(
-                    () => Text(
-                      controller.nombreuser.value,
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue.shade900),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 60, 0, 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Obx(
+                      () => Text(
+                        controller.nombreuser.value,
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue.shade900),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
+                  ],
+                ),
               ),
               DropdownButton<String>(
                 isExpanded: true,
@@ -136,117 +133,122 @@ class _ConsultaState extends State<Consulta> {
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                  // ignore: avoid_unnecessary_containers
-                  child: Container(
-                    child: FutureBuilder(
-                      future: getAllProducts(selectalmacen: selectalmacen.text),
-                      builder: (ctx, snp) {
-                        if (snp.hasData) {
-                          List<Map> listproducts = snp.data!;
-                          return ListView.builder(
-                              itemCount: listproducts.length,
-                              itemBuilder: (ctx, index) {
-                                return Card(
-                                  child: ListTile(
-                                    leading: Icon(
-                                      Icons.shopping_cart_outlined,
-                                      color: Colors.blue.shade900,
-                                      size: 20,
-                                    ),
-                                    title: Text(
-                                      "${listproducts[index]['codbarra']}",
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.blue.shade900),
-                                    ),
-                                    subtitle: Column(
-                                      children: [
-                                        Text(
-                                            "${listproducts[index]['descripcion']}"),
-                                      ],
-                                    ),
-                                    trailing: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              "Conteo: ${listproducts[index]['conteo']}",
-                                              textAlign: TextAlign.center,
-                                              style:
-                                                  const TextStyle(fontSize: 11),
-                                            ),
-                                            Text(
-                                              "Stock Teorico: ${listproducts[index]['stock_inicial']}",
-                                              textAlign: TextAlign.center,
-                                              style:
-                                                  const TextStyle(fontSize: 11),
-                                            ),
-                                          ],
-                                        ),
-                                        IconButton(
-                                            onPressed: () async {
-                                              String? tabla = await funciones
-                                                  .obtenerNombreInventarioActivo();
-                                              final pro = Productos(
-                                                  id: listproducts[index]['id'],
-                                                  codigo: listproducts[index]
-                                                      ['codigo'],
-                                                  codbarra: listproducts[index]
-                                                      ['codbarra'],
-                                                  descripcion: listproducts[index]
-                                                      ['descripcion'],
-                                                  medida: listproducts[index]
-                                                      ['medida'],
-                                                  categoria: listproducts[index]
-                                                      ['categoria'],
-                                                  precio: listproducts[index]
-                                                      ['precio'],
-                                                  stock: listproducts[index]
-                                                      ['stock_inicial'],
-                                                  conteo: listproducts[index]
-                                                      ['conteo'],
-                                                  diferencia: listproducts[index]
-                                                      ['diferencia'],
-                                                  ubicacion: listproducts[index]
-                                                      ['ubicacion'],
-                                                  sububicacion: listproducts[index]
-                                                      ['sububicacion'],
-                                                  lote: listproducts[index]
-                                                      ['lote'],
-                                                  numlote: listproducts[index]
-                                                      ['num_lote'],
-                                                  fechapro: listproducts[index]
-                                                      ['fecha_pro'],
-                                                  fechacad: listproducts[index]['fecha_cad'],
-                                                  serie: listproducts[index]['serie'],
-                                                  numserie: listproducts[index]['num_serie']);
-                                              if (tabla != null) {
-                                                Get.to(() => ActualizarPro(
-                                                      productos: pro,
-                                                      tabla: tabla,
-                                                    ));
-                                              }
-                                            },
-                                            icon: Icon(
-                                              Icons.edit,
-                                              color: Colors.blue.shade900,
-                                            ))
-                                      ],
-                                    ),
+                  child: FutureBuilder(
+                    future: getAllProducts(selectalmacen: selectalmacen.text),
+                    builder: (ctx, snp) {
+                      if (snp.hasData) {
+                        List<Map> listproducts = snp.data!;
+                        return ListView.builder(
+                            itemCount: listproducts.length,
+                            itemBuilder: (ctx, index) {
+                              return Card(
+                                child: ListTile(
+                                  leading: Icon(
+                                    Icons.shopping_cart_outlined,
+                                    color: Colors.blue.shade900,
+                                    size: 20,
                                   ),
-                                );
-                              });
-                        } else {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      },
-                    ),
+                                  title: Text(
+                                    "${listproducts[index]['codbarra']}",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.blue.shade900),
+                                  ),
+                                  subtitle: Column(
+                                    children: [
+                                      Text(
+                                          "${listproducts[index]['descripcion']}"),
+                                    ],
+                                  ),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            "Conteo: ${listproducts[index]['conteo']}",
+                                            textAlign: TextAlign.center,
+                                            style:
+                                                const TextStyle(fontSize: 11),
+                                          ),
+                                          Text(
+                                            "Stock Teorico: ${listproducts[index]['stock_inicial']}",
+                                            textAlign: TextAlign.center,
+                                            style:
+                                                const TextStyle(fontSize: 11),
+                                          ),
+                                        ],
+                                      ),
+                                      IconButton(
+                                          onPressed: () async {
+                                            String? tabla = await funciones
+                                                .obtenerNombreInventarioActivo();
+                                            final pro = Productos(
+                                                id: listproducts[index]['id'],
+                                                codigo: listproducts[index]
+                                                    ['codigo'],
+                                                codbarra: listproducts[index]
+                                                    ['codbarra'],
+                                                descripcion: listproducts[index]
+                                                    ['descripcion'],
+                                                medida: listproducts[index]
+                                                    ['medida'],
+                                                categoria: listproducts[index]
+                                                    ['categoria'],
+                                                precio: listproducts[index]
+                                                    ['precio'],
+                                                stock: listproducts[index]
+                                                    ['stock_inicial'],
+                                                conteo: listproducts[index]
+                                                    ['conteo'],
+                                                diferencia: listproducts[index]
+                                                    ['diferencia'],
+                                                ubicacion: listproducts[index]
+                                                    ['ubicacion'],
+                                                sububicacion:
+                                                    listproducts[index]
+                                                        ['sububicacion'],
+                                                lote: listproducts[index]
+                                                    ['lote'],
+                                                numlote: listproducts[index]
+                                                    ['num_lote'],
+                                                fechapro: listproducts[index]
+                                                    ['fecha_pro'],
+                                                fechacad: listproducts[index]
+                                                    ['fecha_cad'],
+                                                serie: listproducts[index]
+                                                    ['serie'],
+                                                numserie: listproducts[index]['num_serie'],
+                                                tdatos: listproducts[index]['tdatos']);
+                                            if (tabla != null) {
+                                              Get.to(() => ActualizarPro(
+                                                    productos: pro,
+                                                    tabla: tabla,
+                                                  ));
+                                            }
+                                          },
+                                          icon: Icon(
+                                            Icons.edit,
+                                            color: Colors.blue.shade900,
+                                          ))
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      } else {
+                        return const Center(
+                          child: Text(
+                            "Sin Resultados",
+                            style:
+                                TextStyle(fontFamily: "Poppins", fontSize: 25),
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ),
               ),

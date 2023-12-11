@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:inventarios/interface/page/almacenes.dart';
 import 'package:inventarios/interface/page/ubicaciones.dart';
 
+import 'todoslosproductos.dart';
+
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
@@ -35,7 +37,7 @@ class _DashboardState extends State<Dashboard> {
           child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               width: 60,
-              height: openset ? 150.0 : 60.0,
+              height: openset ? 200.0 : 60.0,
               curve: Curves.ease,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
@@ -69,13 +71,18 @@ class _DashboardState extends State<Dashboard> {
                                 color: Colors.white,
                                 size: 30,
                               )),
-                          // IconButton(
-                          //     onPressed: () {},
-                          //     icon: const Icon(
-                          //       Icons.home,
-                          //       color: Colors.white,
-                          //       size: 30,
-                          //     )),
+                          IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _currentWidget = const ProductosIDe();
+                                  openset = !openset;
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.shopping_cart,
+                                color: Colors.white,
+                                size: 30,
+                              )),
                           IconButton(
                             onPressed: () {
                               setState(() {
