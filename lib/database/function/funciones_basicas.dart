@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:inventarios/database/createdb/database.dart';
 import 'package:inventarios/models/productos/ubicacioneslet.dart';
 import 'package:sqflite/sqflite.dart';
@@ -162,5 +163,54 @@ class FuncionesBasic {
       return rows.first['basedatos'] as String?;
     }
     return null;
+  }
+
+  Future<List<Map<String,dynamic>>> buscarProducto(String codigoBarra) async {
+    String? tabla = await obtenerNombreInventarioActivo();
+    final query = 'SELECT * FROM $tabla WHERE codbarra = ?';
+    final result = await rawQuery(query, [codigoBarra]);
+
+    // setState(() {
+    //   resultados = result;
+    //   productoEncontrado = resultados.isNotEmpty;
+    // });
+    return result;
+  }
+
+  Future<void> actualizarconteo(String codigoBarra, String conteo) async {
+    String? tabla = await obtenerNombreInventarioActivo();
+    String? stock = await obtenerstock(tabla!, codigoBarra);
+    String? conteof = await obtenerconteo(tabla, codigoBarra);
+    int stocksrc = int.parse(stock!);
+    int conteoft = int.parse(conteof!);
+    int conteo2 = int.parse(conteo);
+    int resultado2 = conteoft + conteo2;
+    int resultado = resultado2 - stocksrc;
+    String resultadof = resultado.toString();
+    String resultado2f = resultado2.toString();
+
+    bool rep = await funciones.updatedata(
+        "UPDATE $tabla SET conteo = '$resultado2f', diferencia = '$resultadof' WHERE codbarra = '$codigoBarra'");
+    if (rep) {
+      Get.snackbar("Exito", "Se actualizo correctamente");
+    }
+  }
+
+  Future<void> sumarconteo(String codbarra) async {
+    String? tabla = await obtenerNombreInventarioActivo();
+    String? conteo = await obtenerconteo(tabla!, codbarra);
+    String? stock = await obtenerstock(tabla, codbarra);
+    // int stocknum = int.parse(stock!);
+    // int conteof = int.parse(conteo!);
+    int resultado = int.parse(conteo!) + 1;
+    String resultadof = resultado.toString();
+    int diferencia = resultado - int.parse(stock!);
+    String diferenciaf = diferencia.toString();
+    bool rep = await funciones.updatedata(
+        "UPDATE $tabla SET conteo = '$resultadof', diferencia = '$diferenciaf' WHERE codbarra = '$codbarra'");
+    if (rep) {
+      Get.snackbar("Exito", "Se actualizo correctamente");
+    }
+    buscarProducto(codbarra);
   }
 }

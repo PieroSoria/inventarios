@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inventarios/controller/controller.dart';
 import 'package:inventarios/database/function/funciones_basicas.dart';
-import 'package:inventarios/interface/routes/routes.dart';
 import 'package:inventarios/models/productos/productos.dart';
+import 'package:intl/intl.dart';
 
 import '../../components/btnform.dart';
 import '../../database/createdb/database.dart';
@@ -36,6 +36,7 @@ class _ActualizarProState extends State<ActualizarPro> {
   final fechacad = TextEditingController();
   final serie = TextEditingController();
   final numserie = TextEditingController();
+  DateTime? selectedDate;
 
   FuncionesBasic funcioness = FuncionesBasic();
   final controller = Get.put(Controller());
@@ -304,26 +305,46 @@ class _ActualizarProState extends State<ActualizarPro> {
                             padding: const EdgeInsets.symmetric(vertical: 20),
                             child: TextField(
                               controller: fechapro,
-                              style: TextStyle(
-                                  fontSize: 20, color: Colors.blue.shade900),
-                              decoration: InputDecoration(
-                                labelText: 'fecha de produccion',
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20)),
+                              decoration: const InputDecoration(
+                                icon: Icon(Icons.calendar_month_outlined),
+                                labelText: "Seleccione fecha",
                               ),
+                              onTap: () async {
+                                DateTime? pickdate = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2100));
+                                if (pickdate != null) {
+                                  setState(() {
+                                    fechapro.text = DateFormat('yyyy-MM-dd')
+                                        .format(pickdate);
+                                  });
+                                }
+                              },
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 20),
                             child: TextField(
                               controller: fechacad,
-                              style: TextStyle(
-                                  fontSize: 20, color: Colors.blue.shade900),
-                              decoration: InputDecoration(
-                                labelText: 'fecha de caducidad',
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20)),
+                              decoration: const InputDecoration(
+                                icon: Icon(Icons.calendar_month_outlined),
+                                labelText: "Seleccione fecha",
                               ),
+                              onTap: () async {
+                                DateTime? pickdate = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2100));
+                                if (pickdate != null) {
+                                  setState(() {
+                                    fechapro.text = DateFormat('yyyy-MM-dd')
+                                        .format(pickdate);
+                                  });
+                                }
+                              },
                             ),
                           ),
                         ],
@@ -381,13 +402,14 @@ class _ActualizarProState extends State<ActualizarPro> {
                     fecha_pro = "${fechapro.text}",
                     fecha_cad = "${fechacad.text}",
                     serie = "${serie.text}",
-                    num_serie = "${numserie.text}",
+                    num_serie = "${numserie.text}"
                     WHERE id = "${widget.productos.id}"
                     ''');
                       if (rep) {
                         Get.snackbar(
-                            "Exito", "Se actualizo correctamente el almacen");
-                        Get.toNamed(Routes.inicio);
+                            "Exito", "Se actualizo correctamente el producto");
+                        // ignore: use_build_context_synchronously
+                        Navigator.of(context).pop();
                       }
                     },
                     label: "MODIFICAR ALMACEN",

@@ -30,13 +30,12 @@ class ExcelFuncion {
       var excel = Excel.decodeBytes(bytes);
       var sheet = excel.tables[excel.tables.keys.first];
       var rows = sheet!.rows;
-
-      return rows;
+      debugPrint(rows.toString());
+      return rows.sublist(1);
     } catch (e, stackTrace) {
       debugPrint("Error al leer el archivo Excel: $e");
       debugPrint("StackTrace: $stackTrace");
-      // Puedes manejar la excepción de manera adecuada aquí
-      // Por ejemplo, puedes devolver una lista vacía en caso de error
+    
       return List<List<dynamic>>.empty();
     }
   }
@@ -95,6 +94,14 @@ class ExcelFuncion {
       var stock = fila[6]?.value?.toString() ?? '';
       var conteo = '0';
       var diferencia = "-$stock";
+      var lote = fila[7]?.value?.toString() ?? '';
+      var numlote = fila[8]?.value?.toString() ?? '';
+      var fechapro = fila[9]?.value?.toString() ?? '';
+      var fechacad= fila[10]?.value?.toString() ?? '';
+      var serie = fila[11]?.value?.toString() ?? '';
+      var numserie = fila[12]?.value?.toString() ?? '';
+      
+      
 
       final productos = Productos(
           id: double.parse(id).toString(),
@@ -109,12 +116,12 @@ class ExcelFuncion {
           diferencia: diferencia,
           ubicacion: '',
           sububicacion: '',
-          lote: '',
-          numlote: '',
-          fechapro: '',
-          fechacad: '',
-          serie: '',
-          numserie: '',
+          lote: lote,
+          numlote: numlote,
+          fechapro: fechapro,
+          fechacad: fechacad,
+          serie: serie,
+          numserie: numserie,
           tdatos: basedatos);
 
       await insertarProductos(productos, basedatos);
@@ -236,37 +243,7 @@ class ExcelFuncion {
       final excelFile = File(excelPath);
       await excelFile.writeAsBytes(excelBytes!);
       debugPrint('Tabla SQLite convertida a Excel: $excelPath');
-      // ignore: use_build_context_synchronously
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            'MENSAJE',
-            style: TextStyle(color: Colors.blue.shade900),
-          ),
-          content: Text(
-            'SE GUARDO EXITOSAMENTE',
-            style: TextStyle(color: Colors.blue.shade900),
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.blue.shade900,
-                shape: const StadiumBorder(),
-                padding: const EdgeInsets.all(16.0),
-              ),
-              child: const Text(
-                'ACEPTAR',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        ),
-      );
+      Get.snackbar("Exito", "SE GUARDO EXITOSAMENTE");
     } else {
       debugPrint('No se seleccionó ninguna carpeta.');
     }
