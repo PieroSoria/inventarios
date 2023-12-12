@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:inventarios/controller/controller.dart';
 import 'package:inventarios/database/createdb/database.dart';
+import 'package:inventarios/models/productos/productos.dart';
 import 'package:inventarios/models/productos/ubicacioneslet.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -60,60 +62,45 @@ class FuncionesBasic {
     return rows.isNotEmpty;
   }
 
-  Future<List<String>> captureData(
-      String tabla, String columna, String itempri, String? where) async {
-    Database? mydb = await funciones.db;
-    if (where != null) {
-      List<Map> result = await mydb!
-          .query(tabla, columns: [columna], where: "ubicacion = '$where'");
-      Set<String> nombres = {itempri};
-      for (var item in result) {
-        nombres.add(item[columna]);
-      }
-      return nombres.toList();
-    } else {
-      List<Map> result = await mydb!.query(tabla, columns: [columna]);
-      Set<String> nombres = {itempri};
-      for (var item in result) {
-        nombres.add(item[columna]);
-      }
-      return nombres.toList();
-    }
-  }
-
   // Future<List<String>> captureData(
   //     String tabla, String columna, String itempri, String? where) async {
   //   Database? mydb = await funciones.db;
-
   //   if (where != null) {
   //     List<Map> result = await mydb!
   //         .query(tabla, columns: [columna], where: "ubicacion = '$where'");
-
-  //     // Utilizar un conjunto para almacenar valores únicos
-  //     Set<String> uniqueValues = {itempri};
+  //     Set<String> nombres = {itempri};
   //     for (var item in result) {
-  //       uniqueValues.add(item[columna]);
+  //       nombres.add(item[columna]);
   //     }
-
-  //     // Convertir el conjunto a una lista
-  //     List<String> nombres = List.from(uniqueValues);
-
-  //     return nombres;
+  //     return nombres.toList();
   //   } else {
   //     List<Map> result = await mydb!.query(tabla, columns: [columna]);
-
-  //     // Utilizar un conjunto para almacenar valores únicos
-  //     Set<String> uniqueValues = {itempri};
+  //     Set<String> nombres = {itempri};
   //     for (var item in result) {
-  //       uniqueValues.add(item[columna]);
+  //       nombres.add(item[columna]);
   //     }
-
-  //     // Convertir el conjunto a una lista
-  //     List<String> nombres = List.from(uniqueValues);
-
-  //     return nombres;
+  //     return nombres.toList();
   //   }
   // }
+
+  Future<List<String>> captureData(
+      String tabla, String columna, String itempri, String? where) async {
+    Database? mydb = await funciones.db;
+    Set<String> nombres = {itempri};
+    if (mydb != null) {
+      List<Map<String, dynamic>> result;
+      if (where != null) {
+        result = await mydb.query(tabla,
+            columns: [columna], where: "ubicacion = '$where'");
+      } else {
+        result = await mydb.query(tabla, columns: [columna]);
+      }
+      for (var item in result) {
+        nombres.add(item[columna].toString());
+      }
+    }
+    return nombres.toList();
+  }
 
   Future<String?> obtenerNombreInventarioActivo() async {
     Database? mydb = await funciones.db;
@@ -137,6 +124,7 @@ class FuncionesBasic {
     List<Map<String, dynamic>> rows = await mydb!.rawQuery(
       "SELECT stock_inicial FROM $tabla WHERE codbarra = '$codbarra' LIMIT 1",
     );
+    debugPrint("Es $rows");
     if (rows.isNotEmpty) {
       return rows.first['stock_inicial'] as String?;
     }
@@ -165,21 +153,23 @@ class FuncionesBasic {
     return null;
   }
 
-  Future<List<Map<String,dynamic>>> buscarProducto(String codigoBarra) async {
+  Future<void> buscarProducto(String codigoBarra) async {
     String? tabla = await obtenerNombreInventarioActivo();
+    final controller = Get.put(Controller());
     final query = 'SELECT * FROM $tabla WHERE codbarra = ?';
     final result = await rawQuery(query, [codigoBarra]);
 
-    // setState(() {
-    //   resultados = result;
-    //   productoEncontrado = resultados.isNotEmpty;
-    // });
-    return result;
+    controller.resultbus
+        .assignAll(result.map((e) => Productos.fromMap(e)).toList());
   }
 
-  Future<void> actualizarconteo(String codigoBarra, String conteo) async {
+  Future<bool> actualizarconteo(String ubicacion, String sububicacion,
+      String codigoBarra, String conteo) async {
     String? tabla = await obtenerNombreInventarioActivo();
+    debugPrint("Es $codigoBarra");
+    debugPrint("Es $tabla");
     String? stock = await obtenerstock(tabla!, codigoBarra);
+    debugPrint("Es $stock");
     String? conteof = await obtenerconteo(tabla, codigoBarra);
     int stocksrc = int.parse(stock!);
     int conteoft = int.parse(conteof!);
@@ -190,13 +180,16 @@ class FuncionesBasic {
     String resultado2f = resultado2.toString();
 
     bool rep = await funciones.updatedata(
-        "UPDATE $tabla SET conteo = '$resultado2f', diferencia = '$resultadof' WHERE codbarra = '$codigoBarra'");
+        "UPDATE $tabla SET conteo = '$resultado2f', diferencia = '$resultadof',ubicacion = '$ubicacion',sububicacion = '$sububicacion' WHERE codbarra = '$codigoBarra'");
     if (rep) {
-      Get.snackbar("Exito", "Se actualizo correctamente");
+      return true;
+    } else {
+      return false;
     }
   }
 
-  Future<void> sumarconteo(String codbarra) async {
+  Future<void> sumarconteo(
+      String ubicacion, String sububicacion, String codbarra) async {
     String? tabla = await obtenerNombreInventarioActivo();
     String? conteo = await obtenerconteo(tabla!, codbarra);
     String? stock = await obtenerstock(tabla, codbarra);
@@ -207,7 +200,7 @@ class FuncionesBasic {
     int diferencia = resultado - int.parse(stock!);
     String diferenciaf = diferencia.toString();
     bool rep = await funciones.updatedata(
-        "UPDATE $tabla SET conteo = '$resultadof', diferencia = '$diferenciaf' WHERE codbarra = '$codbarra'");
+        "UPDATE $tabla SET conteo = '$resultadof', diferencia = '$diferenciaf', ubicacion = '$ubicacion', sububicacion = '$sububicacion' WHERE codbarra = '$codbarra'");
     if (rep) {
       Get.snackbar("Exito", "Se actualizo correctamente");
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:inventarios/components/botomsheet.dart';
 import 'package:inventarios/components/contador.dart';
 import 'package:inventarios/controller/controller.dart';
 import 'package:inventarios/database/createdb/database.dart';
@@ -16,26 +17,29 @@ class _ConteoState extends State<Conteo> {
   SQLdb sqLdb = SQLdb();
   FuncionesBasic funciones = FuncionesBasic();
   final controller = Get.put(Controller());
-  List<Map<String, dynamic>> resultados = [];
   final buscarController = TextEditingController();
-
   bool productoEncontrado = false;
-  int stockValue = 0;
-  int conteo = 0;
-  int originalStockValue = 0;
   FocusNode _focusNode = FocusNode();
-  String? buscarcodigo;
   bool _switchValue = false;
 
   @override
   void initState() {
-    _focusNode = FocusNode();
-    _focusNode.requestFocus();
+    // _focusNode = FocusNode();
+    // _focusNode.requestFocus();
     // if (stockController.text.isNotEmpty) {
     //   stockValue = int.parse(stockController.text);
     //   originalStockValue = stockValue;
     // }
+    // controller.initDropdownItemsubicacion();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.xubicacion("");
+    controller.xsububicacion("");
+    controller.resultbus.clear();
+    super.dispose();
   }
 
   @override
@@ -48,6 +52,34 @@ class _ConteoState extends State<Conteo> {
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
             child: Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Text(
+                          "Ubicacion Actual",
+                          style: TextStyle(
+                              color: Colors.blue.shade900,
+                              fontFamily: "Poppins",
+                              fontSize: 23),
+                        ),
+                      ),
+                      Obx(() => Text(
+                            controller.xubicacion.value,
+                            style: const TextStyle(
+                                fontFamily: "Poppins", fontSize: 20),
+                          )),
+                      Obx(() => Text(
+                            controller.xsububicacion.value,
+                            style: const TextStyle(
+                                fontFamily: "Poppins", fontSize: 20),
+                          )),
+                    ],
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 60, 0, 20),
                   child: Row(
@@ -72,6 +104,7 @@ class _ConteoState extends State<Conteo> {
                                   _switchValue = value;
                                   _focusNode = FocusNode();
                                   _focusNode.requestFocus();
+                                  controller.resultbus.clear();
                                 });
                               }),
                           const Text("manual")
@@ -86,19 +119,36 @@ class _ConteoState extends State<Conteo> {
                     controller: buscarController,
                     focusNode: _focusNode,
                     onSubmitted: (value) async {
-                      if (_switchValue == false) {
-                        funciones.sumarconteo(value);
+                      if (controller.xubicacion.value == "" &&
+                          controller.xsububicacion.value == "") {
+                        showModalBottomSheet(
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20)),
+                            ),
+                            backgroundColor:
+                                const Color.fromARGB(0, 194, 193, 193),
+                            builder: (context) {
+                              return const BotomSheet();
+                            });
                       } else {
-                        final resul = await funciones.buscarProducto(value);
+                        if (_switchValue == false) {
+                          funciones.sumarconteo(controller.xubicacion.value,
+                              controller.xsububicacion.value, value);
+                        } else {
+                          await funciones.buscarProducto(value);
+                          setState(() {
+                            controller.conteo(value);
+                            debugPrint("Es ${controller.conteo.value}");
+                          });
+                        }
+                        buscarController.text = '';
                         setState(() {
-                          resultados = resul;
+                          _focusNode = FocusNode();
+                          _focusNode.requestFocus();
                         });
                       }
-                      buscarController.text = '';
-                      setState(() {
-                        _focusNode = FocusNode();
-                        _focusNode.requestFocus();
-                      });
                     },
                     style: TextStyle(fontSize: 20, color: Colors.blue.shade900),
                     decoration: InputDecoration(
@@ -110,56 +160,54 @@ class _ConteoState extends State<Conteo> {
                 ),
                 SizedBox(
                   height: 250,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: resultados.length,
-                    itemBuilder: (context, index) {
-                      Map<String, dynamic> resultado = resultados[index];
-                      return ListBody(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: Text(
-                                "Código de Barras: ${resultado['codbarra']}"),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: Text("Categoría: ${resultado['categoria']}"),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: Text(
-                                "Nombre del Producto: ${resultado['descripcion']}"),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: Text("Medida: ${resultado['medida']}"),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: Text(
-                              "Stock Teórico: ${resultado['stock_inicial']}",
-                              style: const TextStyle(fontSize: 16),
+                  child: Obx(
+                    () => ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: controller.resultbus.length,
+                      itemBuilder: (context, index) {
+                        final resultado = controller.resultbus[index];
+                        return ListBody(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: Text(
+                                  "Código de Barras: ${resultado.codbarra}"),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: Text(
-                              "Conteo: ${resultado['conteo']}",
-                              style: const TextStyle(fontSize: 16),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: Text("Categoría: ${resultado.categoria}"),
                             ),
-                          ),
-                        ],
-                      );
-                    },
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: Text(
+                                  "Nombre del Producto: ${resultado.descripcion}"),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: Text("Medida: ${resultado.medida}"),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: Text(
+                                "Stock Teórico: ${resultado.stock}",
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: Text(
+                                "Conteo: ${resultado.conteo}",
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 ),
                 Container(
-                  child: _switchValue
-                      ? Contador(
-                          buscarcodigo: buscarController.text,
-                        )
-                      : null,
+                  child: _switchValue ? const Contador() : null,
                 ),
               ],
             ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:inventarios/database/function/funciones_basicas.dart';
 
+import '../controller/controller.dart';
+
 class Contador extends StatefulWidget {
-  final String buscarcodigo;
-  const Contador({super.key, required this.buscarcodigo});
+  const Contador({super.key});
 
   @override
   State<Contador> createState() => _ContadorState();
@@ -11,6 +13,7 @@ class Contador extends StatefulWidget {
 
 class _ContadorState extends State<Contador> {
   final stockController = TextEditingController(text: '0');
+  final controller = Get.put(Controller());
   final funciones = FuncionesBasic();
   int stockValue = 0;
   int conteo = 0;
@@ -109,7 +112,6 @@ class _ContadorState extends State<Contador> {
                   conteo = 0;
                   stockValue = originalStockValue;
                   stockController.text = stockValue.toString();
-                  // resultados = [];
                 });
               },
               style: ElevatedButton.styleFrom(
@@ -128,38 +130,20 @@ class _ContadorState extends State<Contador> {
             ),
             ElevatedButton(
               onPressed: () async {
-                await funciones.actualizarconteo(
-                    widget.buscarcodigo.toString(), stockController.text);
+                bool result = await funciones.actualizarconteo(
+                    controller.xubicacion.value,
+                    controller.xsububicacion.value,
+                    controller.conteo.value,
+                    stockController.text);
 
-                // ignore: use_build_context_synchronously
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('MENSAJE'),
-                      content: const SingleChildScrollView(
-                        child: ListBody(
-                          children: [
-                            Text(
-                              'Los datos se registraron correctamente',
-                              style: TextStyle(
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Aceptar'),
-                        ),
-                      ],
-                    );
-                  },
-                );
+                if (result) {
+                  setState(() {
+                    controller.conteo("");
+                  });
+                  Get.snackbar("Exito", "Los datos se guardaron correctamente");
+                }else{
+                  Get.snackbar("Opps!", "No se selecciono ninguna ubicacion");
+                }
 
                 setState(() {
                   conteo = 0;

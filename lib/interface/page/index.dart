@@ -47,8 +47,8 @@ class _IndexState extends State<Index> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 167, 166, 166),
+        decoration: BoxDecoration(
+          color: Colors.blue.shade900,
         ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 0, 90),
@@ -56,7 +56,7 @@ class _IndexState extends State<Index> {
         ),
       ),
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 167, 166, 166),
+        backgroundColor: Colors.blue.shade900,
         color: Colors.grey.shade200,
         animationDuration: const Duration(milliseconds: 200),
         index: widget.dashindex,
@@ -77,13 +77,13 @@ class _IndexState extends State<Index> {
             }
           });
         },
-        items: const [
-          Icon(Icons.dashboard),
-          Icon(Icons.replay_outlined),
-          Icon(Icons.search),
-          Icon(Icons.content_paste_search_outlined),
-          Icon(Icons.doorbell_rounded),
-          Icon(Icons.donut_large_outlined),
+        items: [
+          Icon(Icons.dashboard,color: Colors.blue.shade900,),
+          Icon(Icons.replay_outlined,color: Colors.blue.shade900,),
+          Icon(Icons.search,color: Colors.blue.shade900,),
+          Icon(Icons.content_paste_search_outlined,color: Colors.blue.shade900,),
+          Icon(Icons.doorbell_rounded,color: Colors.blue.shade900,),
+          Icon(Icons.donut_large_outlined,color: Colors.blue.shade900,),
         ],
       ),
     );

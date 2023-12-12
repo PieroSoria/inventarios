@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inventarios/components/btnform.dart';
@@ -44,26 +43,26 @@ class _GuardainventarioState extends State<Guardainventario> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(
-                  height: 60,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 160),
-                      child: Obx(
-                        () => Text(
-                          controller.nombreuser.value,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue.shade900),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 60),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 160),
+                        child: Obx(
+                          () => Text(
+                            controller.nombreuser.value,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue.shade900),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -80,29 +79,32 @@ class _GuardainventarioState extends State<Guardainventario> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Btnform(
-                          funcion: () async {
-                            bool result = await cerrarinventario();
-                            if (result) {
-                              Get.snackbar("Exito", "Se cerror correctamente");
-                            } else {
-                              Get.snackbar(
-                                  "Error", "Opps!! ocurrio un problema");
-                            }
-                          },
-                          label: "CERRAR EL INVENTARIO", color: Colors.blue.shade900,),
+                        funcion: () async {
+                          bool result = await cerrarinventario();
+                          if (result) {
+                            Get.snackbar("Exito", "Se cerror correctamente");
+                          } else {
+                            Get.snackbar("Error", "Opps!! ocurrio un problema");
+                          }
+                        },
+                        label: "CERRAR EL INVENTARIO",
+                        color: Colors.blue.shade900,
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Btnform(
-                          funcion: () async {
-                            final SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            final resul = await prefs.remove('tokenuser');
-                            if (resul) {
-                              Get.toNamed(Routes.home);
-                            }
-                          },
-                          label: "Cerrar Session", color: Colors.blue.shade900,),
+                        funcion: () async {
+                          final SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          final resul = await prefs.remove('tokenuser');
+                          if (resul) {
+                            Get.toNamed(Routes.home);
+                          }
+                        },
+                        label: "Cerrar Session",
+                        color: Colors.blue.shade900,
+                      ),
                     ),
                   ],
                 )

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:inventarios/components/input_form.dart';
 import 'package:inventarios/controller/controller.dart';
 
 import '../../models/productos/productos.dart';
@@ -15,11 +14,10 @@ class ProductosIDe extends StatefulWidget {
 
 class _ProductosIDeState extends State<ProductosIDe> {
   final controller = Get.put(Controller());
-  final search = TextEditingController();
 
   @override
   void initState() {
-    controller.cargarDatosInventarios();
+    controller.cargarDatosInventarios(null);
     super.initState();
   }
 
@@ -49,18 +47,24 @@ class _ProductosIDeState extends State<ProductosIDe> {
                         style: TextStyle(fontFamily: "Poppins"),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: CustomInputField(
-                          ispassword: false,
-                          controller: search,
-                          label: "Buscar Producto",
-                          icon: const Icon(
-                            Icons.shopping_cart,
-                            color: Colors.black,
-                          ),
-                          color: Colors.white,
-                        ),
-                      ),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.shopping_cart),
+                              prefixIconColor: Colors.black,
+                              labelText: "Buscar Producto",
+                              labelStyle: const TextStyle(
+                                  color: Colors.black, fontFamily: "Poppins"),
+                              fillColor: Colors.white,
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            onChanged: (String value){
+                              controller.cargarDatosInventarios(value);
+                            },
+                          )),
                     ],
                   ),
                 ),
@@ -79,8 +83,11 @@ class _ProductosIDeState extends State<ProductosIDe> {
               child: Column(
                 children: [
                   const Padding(
-                    padding: EdgeInsets.fromLTRB(0,20,0,5),
-                    child: Text("LISTA DE PRODUCTOS",style: TextStyle(fontFamily: "Poppins",fontSize: 25),),
+                    padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
+                    child: Text(
+                      "LISTA DE PRODUCTOS",
+                      style: TextStyle(fontFamily: "Poppins", fontSize: 25),
+                    ),
                   ),
                   Expanded(
                       flex: 6,
@@ -131,7 +138,7 @@ class _ProductosIDeState extends State<ProductosIDe> {
                                             numserie:
                                                 listproducts[index].numserie,
                                             tdatos: listproducts[index].tdatos);
-                                  
+
                                         Get.to(() => ActualizarPro(
                                               productos: pro,
                                               tabla: listproducts[index].tdatos,
