@@ -11,7 +11,7 @@ Future<bool> signupwithemailandpassword(UserData data) async {
   var cliente = http.Client();
   try {
     var url = Uri.https(UrlDominio.urldominio1, UrlDirection.signup);
-    var response = await http.post(url, body: {
+    var response = await cliente.post(url, body: {
       'nombre': data.nombre,
       'apellido': data.apellido,
       'email': data.email,

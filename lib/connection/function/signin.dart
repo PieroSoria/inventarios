@@ -14,7 +14,7 @@ Future<bool> signinwithemailandpassword(UserData data) async {
   try {
     var url = Uri.https(UrlDominio.urldominio1, UrlDirection.signin);
     var response =
-        await http.post(url, body: {'email': data.email, 'pass': data.pass});
+        await cliente.post(url, body: {'email': data.email, 'pass': data.pass});
 
     debugPrint(response.body);
 
@@ -25,6 +25,7 @@ Future<bool> signinwithemailandpassword(UserData data) async {
         Get.snackbar("Success", "Inicio de sesión exitoso");
         debugPrint("ID: ${responseInfo[0]['id']}");
         debugPrint("token: ${responseInfo[0]['token']}");
+
         tokenfuncion.guardartoken("${responseInfo[0]['token']}");
         return true;
       } else if (responseInfo[0].containsKey('mensaje')) {
@@ -36,6 +37,7 @@ Future<bool> signinwithemailandpassword(UserData data) async {
       return false;
     }
   } catch (e) {
+    debugPrint("$e");
     Get.snackbar("Error", "Error en la comunicación con el servidor");
   } finally {
     cliente.close();
@@ -43,3 +45,5 @@ Future<bool> signinwithemailandpassword(UserData data) async {
 
   return false;
 }
+
+

@@ -37,15 +37,28 @@ class _ActualizarProState extends State<ActualizarPro> {
   final serie = TextEditingController();
   final numserie = TextEditingController();
   DateTime? selectedDate;
-
+  late bool loteyserie;
   FuncionesBasic funcioness = FuncionesBasic();
   final controller = Get.put(Controller());
   String _selectedItem = "SELECCIONAR UBICACION";
   String _selectedItem2 = "SELECCIONAR SUBUBICACION";
 
   SQLdb funciones = SQLdb();
+
+  void loteserie(String lote, String serie) {
+    if (lote == '1') {
+      setState(() {
+        loteyserie = false;
+      });
+    } else if (serie == "1") {
+      setState(() {
+        loteyserie = true;
+      });
+    }
+  }
+
   @override
-  void initState() {
+  void initState() async {
     codigo.text = widget.productos.codigo;
     codbarra.text = widget.productos.codbarra;
     descripcion.text = widget.productos.descripcion;
@@ -64,11 +77,9 @@ class _ActualizarProState extends State<ActualizarPro> {
     serie.text = widget.productos.serie;
     numserie.text = widget.productos.numserie;
     controller.initDropdownItemsubicacion();
-
+    loteserie(lote.text, serie.text);
     super.initState();
   }
-
-  bool loteyserie = false;
 
   @override
   Widget build(BuildContext context) {
