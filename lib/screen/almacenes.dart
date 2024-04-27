@@ -67,6 +67,7 @@ class _AlmacenesIDeState extends State<AlmacenesIDe> {
                 ),
                 child: TextFormField(
                   controller: widget.controller.searchalmacen,
+                  textCapitalization: TextCapitalization.characters,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "El campo no puede ser vacio";
@@ -88,6 +89,7 @@ class _AlmacenesIDeState extends State<AlmacenesIDe> {
                 ),
                 child: TextFormField(
                   controller: widget.controller.searchsubalmacen,
+                  textCapitalization: TextCapitalization.characters,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "El campo no puede ser vacio";

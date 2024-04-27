@@ -23,6 +23,16 @@ class _InventarioIDEState extends State<InventarioIDE> {
   }
 
   @override
+  void dispose() {
+    eliminardata();
+    super.dispose();
+  }
+
+  eliminardata() async {
+    widget.controller.listadeinventarios.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [

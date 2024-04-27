@@ -52,6 +52,7 @@ class Home extends GetWidget<HomeController> {
         body: Container(
           decoration: const BoxDecoration(),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
                 "assets/image/logo.jpg",

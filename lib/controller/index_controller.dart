@@ -12,6 +12,7 @@ import 'package:inventariosnew/domain/repository/database_repository_interface.d
 import 'package:inventariosnew/domain/repository/excel_repository_interface.dart';
 import 'package:inventariosnew/domain/repository/local_repository_interface.dart';
 import 'package:inventariosnew/screen/detalle_producto_page/detalle_pro_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IndexController extends GetxController {
   final LocalRepositoryInterface localRepositoryInterface;
@@ -54,6 +55,8 @@ class IndexController extends GetxController {
   var searchText = ''.obs;
   var selectedItem = ''.obs;
   var selectedItem2 = ''.obs;
+  var selectalmacenfiltro = ''.obs;
+  var selectsubalmacenfiltro = ''.obs;
   var currentDateTime = ''.obs;
   var isDisposed = false.obs;
 
@@ -66,9 +69,19 @@ class IndexController extends GetxController {
     });
   }
 
+  void guardarindex(int index) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setInt('index', index);
+  }
+
+  void usarindex() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    indexpage(pref.getInt('index') ?? 0);
+  }
+
   @override
   void onInit() {
-    indexpage.value = 0;
+    usarindex();
     verificaropcionedit();
     super.onInit();
   }
@@ -78,8 +91,7 @@ class IndexController extends GetxController {
     opcionedit(result);
   }
 
-  Future<void> getAllProducts(
-      {required String selectalmacen}) async {
+  Future<void> getAllProducts({required String selectalmacen}) async {
     String? tabla = await databaseRepositoryInterface
         .obtenernombredelinventarioactivomydb();
     productostotal.clear();

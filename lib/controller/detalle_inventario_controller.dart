@@ -32,12 +32,11 @@ class DetalleInventarioController extends GetxController {
 
   Future<void> activarinventario(Inventarios inventario) async {
     bool rep4 = await databaseRepositoryInterface.updatedata(
-        query: "UPDATE ? SET activo = ?",
-        arguments: ["inventarios", "CERRADO"]);
+        query: "UPDATE inventarios SET activo = ?", arguments: ["CERRADO"]);
     if (estadoinve.value) {
       bool rep3 = await databaseRepositoryInterface.updatedata(
-          query: "UPDATE ? SET activo = ? WHERE nombre = ?",
-          arguments: ["inventarios", "ABIERTO", inventario.nombre]);
+          query: "UPDATE inventarios SET activo = ? WHERE nombre = ?",
+          arguments: ["ABIERTO", inventario.nombre]);
       if (rep4 && rep3) {
         Get.snackbar("Exito", "Se Abrio el inventario");
       } else {

@@ -16,7 +16,6 @@ class _ConsultaState extends State<Consulta> {
   @override
   void initState() {
     super.initState();
-
     widget.controller.selectedItem(dropdownItems.first);
     widget.controller
         .getAllProducts(selectalmacen: widget.controller.selectedItem.value);

@@ -31,8 +31,8 @@ class _ProductosIDeState extends State<ProductosIDe> {
   }
 
   void eliminardata() async {
-    widget.controller.selectedItem("");
-    widget.controller.selectedItem2("");
+    widget.controller.selectalmacenfiltro("");
+    widget.controller.selectsubalmacenfiltro("");
   }
 
   @override
@@ -87,8 +87,8 @@ class _ProductosIDeState extends State<ProductosIDe> {
                   Obx(
                     () => DropdownButton<dynamic>(
                       isExpanded: true,
-                      value: widget.controller.selectedItem.value != ""
-                          ? widget.controller.selectedItem.value
+                      value: widget.controller.selectalmacenfiltro.value != ""
+                          ? widget.controller.selectalmacenfiltro.value
                           : null,
                       hint: const Center(child: Text("Seleccionar una opcion")),
                       items: widget.controller.listalmacenes.map((item) {
@@ -102,20 +102,21 @@ class _ProductosIDeState extends State<ProductosIDe> {
                         );
                       }).toList(),
                       onChanged: (value) async {
-                        widget.controller.selectedItem(value.toString());
+                        widget.controller.selectalmacenfiltro(value.toString());
                         await widget.controller.cargarsubalmacenesitem(
                           where: value.toString(),
                         );
                         await widget.controller.cargartodoslosproducts(
                           search: null,
-                          almacen: widget.controller.selectedItem.value,
-                          subalmacen: widget.controller.selectedItem2.value,
+                          almacen: widget.controller.selectalmacenfiltro.value,
+                          subalmacen:
+                              widget.controller.selectsubalmacenfiltro.value,
                         );
                       },
                       borderRadius: BorderRadius.circular(20),
                       icon: IconButton(
                         onPressed: () {
-                          widget.controller.selectedItem("");
+                          widget.controller.selectalmacenfiltro("");
                           widget.controller.cargartodoslosproducts(
                             search: null,
                             almacen: null,
@@ -128,9 +129,10 @@ class _ProductosIDeState extends State<ProductosIDe> {
                   ),
                   Obx(
                     () => DropdownButton(
-                      value: widget.controller.selectedItem2.value != ""
-                          ? widget.controller.selectedItem2.value
-                          : null,
+                      value:
+                          widget.controller.selectsubalmacenfiltro.value != ""
+                              ? widget.controller.selectsubalmacenfiltro.value
+                              : null,
                       isExpanded: true,
                       hint: const Center(child: Text("Seleccionar una opcion")),
                       items: widget.controller.listsubalmacenes.map((item) {
@@ -144,17 +146,19 @@ class _ProductosIDeState extends State<ProductosIDe> {
                         );
                       }).toList(),
                       onChanged: (value) {
-                        widget.controller.selectedItem2(value.toString());
+                        widget.controller
+                            .selectsubalmacenfiltro(value.toString());
                         widget.controller.cargartodoslosproducts(
                           search: null,
-                          almacen: widget.controller.selectedItem.value,
-                          subalmacen: widget.controller.selectedItem2.value,
+                          almacen: widget.controller.selectalmacenfiltro.value,
+                          subalmacen:
+                              widget.controller.selectsubalmacenfiltro.value,
                         );
                       },
                       icon: IconButton(
                         onPressed: () {
-                          widget.controller.selectedItem("");
-                          widget.controller.selectedItem2("");
+                          widget.controller.selectalmacenfiltro("");
+                          widget.controller.selectsubalmacenfiltro("");
                           widget.controller.cargartodoslosproducts(
                             search: null,
                             almacen: null,

@@ -21,7 +21,6 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void dispose() {
-    widget.controller.almacenes == [];
     super.dispose();
   }
 

@@ -73,37 +73,43 @@ class IndexScreen extends GetWidget<IndexController> {
           }
         }),
       ),
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.blue.shade900,
-        color: Colors.grey.shade200,
-        animationDuration: const Duration(milliseconds: 200),
-        onTap: (index) => controller.indexpage(index),
-        items: [
-          Icon(
-            Icons.dashboard,
-            color: Colors.blue.shade900,
-          ),
-          Icon(
-            Icons.replay_outlined,
-            color: Colors.blue.shade900,
-          ),
-          Icon(
-            Icons.search,
-            color: Colors.blue.shade900,
-          ),
-          Icon(
-            Icons.content_paste_search_outlined,
-            color: Colors.blue.shade900,
-          ),
-          Icon(
-            Icons.doorbell_rounded,
-            color: Colors.blue.shade900,
-          ),
-          Icon(
-            Icons.donut_large_outlined,
-            color: Colors.blue.shade900,
-          ),
-        ],
+      bottomNavigationBar: Obx(
+        () => CurvedNavigationBar(
+          backgroundColor: Colors.blue.shade900,
+          color: Colors.grey.shade200,
+          animationDuration: const Duration(milliseconds: 200),
+          index: controller.indexpage.value,
+          onTap: (index) {
+            controller.indexpage(index);
+            controller.guardarindex(index);
+          },
+          items: [
+            Icon(
+              Icons.dashboard,
+              color: Colors.blue.shade900,
+            ),
+            Icon(
+              Icons.replay_outlined,
+              color: Colors.blue.shade900,
+            ),
+            Icon(
+              Icons.search,
+              color: Colors.blue.shade900,
+            ),
+            Icon(
+              Icons.content_paste_search_outlined,
+              color: Colors.blue.shade900,
+            ),
+            Icon(
+              Icons.doorbell_rounded,
+              color: Colors.blue.shade900,
+            ),
+            Icon(
+              Icons.donut_large_outlined,
+              color: Colors.blue.shade900,
+            ),
+          ],
+        ),
       ),
     );
   }
