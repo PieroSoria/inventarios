@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:inventariosnew/components/btnform.dart';
 import 'package:inventariosnew/components/input_custom_form.dart';
+import 'package:inventariosnew/components/input_edit_dateCustom.dart';
 import 'package:inventariosnew/controller/detalle_pro_controller.dart';
 import 'package:inventariosnew/core/routes/routes.dart';
 import 'package:inventariosnew/domain/model/productos/productos.dart';
@@ -218,43 +219,3 @@ class DetalleProScreen extends GetWidget<DetalleProController> {
   }
 }
 
-class InputEditDateCustom extends StatefulWidget {
-  const InputEditDateCustom({
-    super.key,
-    required this.controller,
-    required this.labeltext,
-    required this.nuevoitem,
-    required this.press,
-  });
-
-  final TextEditingController controller;
-  final String nuevoitem;
-  final String labeltext;
-  final Function() press;
-
-  @override
-  State<InputEditDateCustom> createState() => _InputEditDateCustomState();
-}
-
-class _InputEditDateCustomState extends State<InputEditDateCustom> {
-  @override
-  void initState() {
-    widget.controller.text = widget.nuevoitem;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: TextField(
-        controller: widget.controller,
-        decoration: InputDecoration(
-          icon: const Icon(Icons.calendar_month_outlined),
-          labelText: widget.labeltext,
-        ),
-        onTap: widget.press,
-      ),
-    );
-  }
-}

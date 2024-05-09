@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:inventariosnew/components/botomsheet.dart';
 import 'package:inventariosnew/components/contador.dart';
+import 'package:inventariosnew/components/input_edit_dateCustom.dart';
 import 'package:inventariosnew/controller/index_controller.dart';
 
 class Conteo extends StatefulWidget {
@@ -34,6 +36,68 @@ class _ConteoState extends State<Conteo> {
     widget.controller.xalmacen("");
     widget.controller.xsubalmacen("");
     widget.controller.resultbus(null);
+  }
+
+  Future<dynamic> funciondeconteo(String value) async {
+    if (widget.controller.xalmacen.value != "" &&
+        widget.controller.xsubalmacen.value != "") {
+      if (_switchValue == false) {
+        showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return SizedBox(
+                child: Column(
+                  children: [
+                    TextField(),
+                    InputEditDateCustom(
+                      controller: widget.controller.fechacadconteo,
+                      labeltext: "Ingrese fecha de produccion",
+                      nuevoitem: "",
+                      press: () async {
+                        DateTime? pickdate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100));
+                        if (pickdate != null) {
+                          widget.controller.fechacadconteo.text =
+                              DateFormat('yyyy-MM-dd').format(pickdate);
+                        }
+                      },
+                    ),
+                    TextField(),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await widget.controller.sumarconteo(codbarra: value);
+                      },
+                      child: Text(
+                        "Guardar",
+                      ),
+                    )
+                  ],
+                ),
+              );
+            });
+      } else {
+        await widget.controller.buscarproducto(codbarra: value);
+      }
+    } else {
+      showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
+        ),
+        backgroundColor: const Color.fromARGB(0, 194, 193, 193),
+        builder: (context) {
+          return BotomSheet(
+            controller: widget.controller,
+          );
+        },
+      );
+    }
+    widget.controller.buscarController.clear();
   }
 
   @override
@@ -136,31 +200,7 @@ class _ConteoState extends State<Conteo> {
                   controller: widget.controller.buscarController,
                   focusNode: _focusNode,
                   textCapitalization: TextCapitalization.characters,
-                  onSubmitted: (value) async {
-                    if (widget.controller.xalmacen.value != "" &&
-                        widget.controller.xsubalmacen.value != "") {
-                      if (_switchValue == false) {
-                        await widget.controller.sumarconteo(codbarra: value);
-                      } else {
-                        await widget.controller.buscarproducto(codbarra: value);
-                      }
-                    } else {
-                      showModalBottomSheet(
-                        context: context,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(20)),
-                        ),
-                        backgroundColor: const Color.fromARGB(0, 194, 193, 193),
-                        builder: (context) {
-                          return BotomSheet(
-                            controller: widget.controller,
-                          );
-                        },
-                      );
-                    }
-                    widget.controller.buscarController.clear();
-                  },
+                  onSubmitted: funciondeconteo,
                   style: TextStyle(fontSize: 20, color: Colors.blue.shade900),
                   decoration: InputDecoration(
                     labelText: 'Ingrese código de barras',

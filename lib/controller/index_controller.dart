@@ -52,6 +52,8 @@ class IndexController extends GetxController {
   final selectconteo = TextEditingController();
   final tablenameinventario = TextEditingController();
   final buscarController = TextEditingController();
+  final fechaproconteo = TextEditingController();
+  final fechacadconteo = TextEditingController();
   var searchText = ''.obs;
   var selectedItem = ''.obs;
   var selectedItem2 = ''.obs;

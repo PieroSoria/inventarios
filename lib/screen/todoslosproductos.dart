@@ -123,7 +123,7 @@ class _ProductosIDeState extends State<ProductosIDe> {
                             subalmacen: null,
                           );
                         },
-                        icon: const Icon(Icons.remove),
+                        icon: const Icon(Icons.backspace_outlined),
                       ),
                     ),
                   ),
@@ -165,7 +165,7 @@ class _ProductosIDeState extends State<ProductosIDe> {
                             subalmacen: null,
                           );
                         },
-                        icon: const Icon(Icons.remove),
+                        icon: const Icon(Icons.backspace_outlined),
                       ),
                     ),
                   )

@@ -3,5 +3,5 @@ abstract class ExcelRepositoryInterface {
       {required String filePath, required String basedatos});
   Future<List<List<dynamic>>> leerExcel({required String filePath});
   Future<bool> convertTableToExcel(
-      {required String name, required List<Map<String, dynamic>> tabledata});
+      {required String name, required List<Map<String, dynamic>> tabledata,});
 }

@@ -41,7 +41,7 @@ class HomeController extends GetxController {
       await localRepositoryInterface.guardarToken(authToken: result.token);
       Get.toNamed(Routes.index);
     } else {
-      Get.back();
+      Get.snackbar("Opps!", "No se encontro el usuario");
     }
   }
 
