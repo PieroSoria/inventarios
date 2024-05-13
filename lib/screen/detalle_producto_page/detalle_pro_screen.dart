@@ -85,10 +85,6 @@ class DetalleProScreen extends GetWidget<DetalleProController> {
                       controller: controller.almacen,
                       labeltext: "Almacen",
                     ),
-                    InputEditCustom(
-                      controller: controller.subalmacen,
-                      labeltext: "Sub Almacen",
-                    ),
                     Obx(
                       () => Column(
                         children: [
@@ -127,11 +123,11 @@ class DetalleProScreen extends GetWidget<DetalleProController> {
                           ? Column(
                               children: [
                                 InputEditCustom(
-                                  controller: controller.lote,
+                                  controller: controller.tipoproducto,
                                   labeltext: 'lote',
                                 ),
                                 InputEditCustom(
-                                  controller: controller.numlote,
+                                  controller: controller.valor,
                                   labeltext: 'numero de lote',
                                 ),
                                 InputEditDateCustom(
@@ -174,11 +170,11 @@ class DetalleProScreen extends GetWidget<DetalleProController> {
                               ? Column(
                                   children: [
                                     InputEditCustom(
-                                      controller: controller.serie,
+                                      controller: controller.tipoproducto,
                                       labeltext: 'Serie',
                                     ),
                                     InputEditCustom(
-                                      controller: controller.numserie,
+                                      controller: controller.valor,
                                       labeltext: 'numero de serie',
                                     ),
                                   ],
@@ -218,4 +214,3 @@ class DetalleProScreen extends GetWidget<DetalleProController> {
     );
   }
 }
-

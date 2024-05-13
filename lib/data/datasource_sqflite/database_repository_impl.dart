@@ -345,65 +345,45 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
         codbarra TEXT,
         producto TEXT,
         almacen TEXT,
-        subalmacen TEXT,
         medida TEXT,
         categoria TEXT,
         precio TEXT,
         stock_inicial TEXT,
         conteo TEXT,
         diferencia TEXT,
-        lote TEXT,
-        num_lote TEXT,
+        tipoproducto TEXT,
+        valor TEXT,
         fecha_pro TEXT,
         fecha_cad TEXT,
-        serie TEXT,
-        num_serie TEXT,
+        comentario TEXT,
         tdatos TEXT
       )
     ''');
       }
 
       for (var fila in data) {
-        var id = fila[0]?.value?.toString() ?? '';
-        var codbarra = fila[1]?.value?.toString() ?? '';
-        var producto = fila[2]?.value?.toString() ?? '';
-        var almacen = fila[3]?.value?.toString() ?? '';
-        var subalmacen = fila[4]?.value?.toString() ?? '';
-        var medida = fila[5]?.value?.toString() ?? '';
-        var categoria = fila[6]?.value?.toString() ?? '';
-        var precio = fila[7]?.value?.toString() ?? '';
-        var stock = fila[8]?.value?.toString() ?? '';
-        var conteo = fila[9]?.value?.toString() ?? '';
-        var diferencia = "-$stock";
-        var lote = fila[10]?.value?.toString() ?? '';
-        var numlote = fila[11]?.value?.toString() ?? '';
-        var fechapro = fila[12]?.value?.toString() ?? '';
-        var fechacad = fila[13]?.value?.toString() ?? '';
-        var serie = fila[14]?.value?.toString() ?? '';
-        var numserie = fila[15]?.value?.toString() ?? '';
-
         final productos = Productos(
-            id: id,
-            codbarra: codbarra,
-            producto: producto,
-            almacen: almacen,
-            subalmacen: subalmacen,
-            medida: medida,
-            categoria: categoria,
-            precio: precio,
-            stock: stock,
-            conteo: conteo,
-            diferencia: diferencia,
-            lote: lote,
-            numlote: numlote,
-            fechapro: fechapro,
-            fechacad: fechacad,
-            serie: serie,
-            numserie: numserie,
+            id: "",
+            codbarra: fila[0]?.value?.toString() ?? '',
+            producto: fila[1]?.value?.toString() ?? '',
+            almacen: fila[2]?.value?.toString() ?? '',
+            medida: fila[3]?.value?.toString() ?? '',
+            categoria: fila[4]?.value?.toString() ?? '',
+            precio: fila[5]?.value?.toString() ?? '',
+            stock: fila[6]?.value?.toString() ?? '',
+            conteo: fila[7]?.value?.toString() ?? '',
+            diferencia: "-${fila[7]?.value?.toString() ?? ''}",
+            tipoproducto: fila[8]?.value?.toString() ?? '',
+            valor: fila[9]?.value?.toString() ?? '',
+            fechapro: fila[10]?.value?.toString() ?? '',
+            fechacad: fila[11]?.value?.toString() ?? '',
+            comentario: fila[12]?.value?.toString() ?? '',
             tdatos: basedatos);
 
         await insertarProductos(
-            prod: productos, tableName: basedatos, loteserie: lote == "1");
+          prod: productos,
+          tableName: basedatos,
+        );
       }
     } catch (e) {
       debugPrint("Error de insertar producto $e");
@@ -413,77 +393,45 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
   }
 
   @override
-  Future<bool> insertarProductos(
-      {required Productos prod,
-      required String tableName,
-      required bool loteserie}) async {
+  Future<bool> insertarProductos({
+    required Productos prod,
+    required String tableName,
+  }) async {
     Database mydb = await iniciarbasededatos();
     try {
-      if (loteserie) {
-        final result = await mydb.rawInsert('''INSERT INTO $tableName(
+      final result = await mydb.rawInsert('''INSERT INTO $tableName(
         codbarra,
         producto,
         almacen,
-        subalmacen,
         medida,
         categoria,
         precio,
         stock_inicial,
         conteo,
         diferencia,
-        lote ,
-        num_lote ,
+        tipoproducto ,
+        valor ,
         fecha_pro ,
         fecha_cad ,
+        comentario ,
         tdatos ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', [
-          prod.codbarra,
-          prod.producto,
-          prod.almacen,
-          prod.subalmacen,
-          prod.medida,
-          prod.categoria,
-          prod.precio,
-          prod.stock,
-          prod.conteo,
-          prod.diferencia,
-          prod.lote,
-          prod.numlote,
-          prod.fechapro,
-          prod.fechacad,
-          prod.tdatos
-        ]);
-        return result > 0;
-      } else {
-        final result = await mydb.rawInsert('''INSERT INTO $tableName(
-        codbarra,
-        producto,
-        almacen,
-        subalmacen,
-        medida,
-        categoria,
-        precio,
-        stock_inicial,
-        conteo,
-        diferencia,
-        serie ,
-        num_serie ,
-        tdatos ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)''', [
-          prod.codbarra,
-          prod.producto,
-          prod.almacen,
-          prod.subalmacen,
-          prod.medida,
-          prod.categoria,
-          prod.precio,
-          prod.stock,
-          prod.conteo,
-          prod.diferencia,
-          prod.serie,
-          prod.numserie,
-          prod.tdatos,
-        ]);
-        return result > 0;
-      }
+        prod.codbarra,
+        prod.producto,
+        prod.almacen,
+        prod.medida,
+        prod.categoria,
+        prod.precio,
+        prod.stock,
+        prod.conteo,
+        prod.diferencia,
+        prod.tipoproducto,
+        prod.valor,
+        prod.fechapro,
+        prod.fechacad,
+        prod.comentario,
+        prod.tdatos
+      ]);
+      return result > 0;
     } catch (e) {
       debugPrint("Error de insertarproducto: $e");
       return false;
@@ -616,13 +564,9 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
               .toList();
         } else if (almacen != null && subalmacen != null) {
           productos = productos
-              .where((producto) =>
-                  producto.almacen
-                      .toLowerCase()
-                      .contains(almacen.toLowerCase()) &&
-                  producto.subalmacen
-                      .toLowerCase()
-                      .contains(subalmacen.toLowerCase()))
+              .where((producto) => producto.almacen
+                  .toLowerCase()
+                  .contains(almacen.toLowerCase()))
               .toList();
         }
         result.addAll(productos);

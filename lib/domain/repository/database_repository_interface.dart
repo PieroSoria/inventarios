@@ -48,7 +48,6 @@ abstract class DatabaseRepositoryInterface {
   Future<bool> insertarProductos({
     required Productos prod,
     required String tableName,
-    required bool loteserie,
   });
   Future<List<Inventarios>> getdataInventariobyDatabase(
       {required String query});

@@ -18,16 +18,14 @@ class DetalleProController extends GetxController {
   final conteo = TextEditingController();
   final diferencia = TextEditingController();
   final almacen = TextEditingController();
-  final subalmacen = TextEditingController();
-  final lote = TextEditingController();
-  final numlote = TextEditingController();
+  final tipoproducto = TextEditingController();
+  final valor = TextEditingController();
   final fechapro = TextEditingController();
   final fechacad = TextEditingController();
-  final serie = TextEditingController();
-  final numserie = TextEditingController();
+  final comentario = TextEditingController();
 
   var dropitemalmacen = [].obs;
-  var dropitemsubalmacen = [].obs;
+
   DateTime? selectedDate;
   var selectedItem = ''.obs;
   var selectedItem2 = ''.obs;
@@ -43,21 +41,20 @@ class DetalleProController extends GetxController {
     conteo.text = productos.conteo ?? '';
     diferencia.text = productos.diferencia ?? '';
     almacen.text = productos.almacen ?? '';
-    subalmacen.text = productos.subalmacen ?? '';
-    lote.text = productos.lote ?? '';
-    numlote.text = productos.numlote ?? '';
+
+    tipoproducto.text = productos.tipoproducto ?? '';
+    valor.text = productos.valor ?? '';
     fechapro.text = productos.fechapro ?? '';
     fechacad.text = productos.fechacad ?? '';
-    serie.text = productos.serie ?? '';
-    numserie.text = productos.numserie ?? '';
+    comentario.text = productos.comentario ?? '';
 
-    loteserie(lote.text, serie.text);
+    loteserie(tipoproducto.text);
   }
 
-  void loteserie(String lote, String serie) {
-    if (lote == '1') {
+  void loteserie(String tipoproducto) {
+    if (tipoproducto == '1') {
       selectmode("Lote");
-    } else if (serie == "1") {
+    } else if (tipoproducto == "2") {
       selectmode("Serie");
     } else {
       selectmode("Ninguno");
@@ -71,37 +68,33 @@ class DetalleProController extends GetxController {
                     codbarra = ?,
                     producto = ?,
                     almacen = ?,
-                    subalmacen = ?,
                     medida = ?,
                     categoria = ?,
                     precio = ?,
                     stock_inicial = ?,
                     conteo = ?,
                     diferencia = ?,
-                    lote = ?,
-                    num_lote = ?,
+                    tipoproducto = ?,
+                    valor = ?,
                     fecha_pro = ?,
                     fecha_cad = ?,
-                    serie = ?,
-                    num_serie = ?
+                    comentario = ?,
                     WHERE id = ?
                     ''', arguments: [
       codbarra.text,
       producto.text,
       almacen.text,
-      subalmacen.text,
       medida.text,
       categoria.text,
       precio.text,
       stock.text,
       conteo.text,
       diferencia.text,
-      lote.text,
-      numlote.text,
+      tipoproducto.text,
+      valor.text,
       fechapro.text,
       fechacad.text,
-      serie.text,
-      numserie.text,
+      comentario.text,
       id
     ]);
     if (rep) {
@@ -113,11 +106,5 @@ class DetalleProController extends GetxController {
     final result =
         await databaseRepositoryInterface.listadelamacenes(where: null);
     dropitemalmacen.assignAll(result);
-  }
-
-  Future<void> cargarlistasubalmacen({required String where}) async {
-    final result =
-        await databaseRepositoryInterface.listadelamacenes(where: where);
-    dropitemsubalmacen.assignAll(result);
   }
 }
