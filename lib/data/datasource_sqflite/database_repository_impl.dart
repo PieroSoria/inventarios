@@ -358,22 +358,30 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
 
       for (var fila in data) {
         final productos = Productos(
+          id: "",
+          codbarra: fila[0]?.value?.toString() ?? '',
+          producto: fila[1]?.value?.toString() ?? '',
+          almacen: fila[2]?.value?.toString() ?? '',
+          medida: fila[3]?.value?.toString() ?? '',
+          categoria: fila[4]?.value?.toString() ?? '',
+          precio: fila[5]?.value?.toString() ?? '',
+          stock: fila[6]?.value?.toString() ?? '',
+          conteo: fila[7]?.value?.toString() ?? '',
+          diferencia: "-${fila[7]?.value?.toString() ?? ''}",
+          tipoproducto: fila[8]?.value?.toString() ?? '',
+          valor: fila[9]?.value?.toString() ?? '',
+          fechapro: fila[10]?.value?.toString() ?? '',
+          fechacad: fila[11]?.value?.toString() ?? '',
+          comentario: fila[12]?.value?.toString() ?? '',
+          tdatos: basedatos,
+        );
+
+        await insertalmacen(
+          almacen: Almacenes(
             id: "",
-            codbarra: fila[0]?.value?.toString() ?? '',
-            producto: fila[1]?.value?.toString() ?? '',
             almacen: fila[2]?.value?.toString() ?? '',
-            medida: fila[3]?.value?.toString() ?? '',
-            categoria: fila[4]?.value?.toString() ?? '',
-            precio: fila[5]?.value?.toString() ?? '',
-            stock: fila[6]?.value?.toString() ?? '',
-            conteo: fila[7]?.value?.toString() ?? '',
-            diferencia: "-${fila[7]?.value?.toString() ?? ''}",
-            tipoproducto: fila[8]?.value?.toString() ?? '',
-            valor: fila[9]?.value?.toString() ?? '',
-            fechapro: fila[10]?.value?.toString() ?? '',
-            fechacad: fila[11]?.value?.toString() ?? '',
-            comentario: fila[12]?.value?.toString() ?? '',
-            tdatos: basedatos);
+          ),
+        );
 
         await insertarProductos(
           prod: productos,
