@@ -82,35 +82,14 @@ class _AlmacenesIDeState extends State<AlmacenesIDe> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 30,
-                  vertical: 10,
-                ),
-                child: TextFormField(
-                  controller: widget.controller.searchsubalmacen,
-                  textCapitalization: TextCapitalization.characters,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "El campo no puede ser vacio";
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Ingrese el subalmacen',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-              ),
+              
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Btnform(
                     funcion: () {
                       widget.controller.searchalmacen.text = '';
-                      widget.controller.searchsubalmacen.text = '';
+                   
                       widget.controller.searchText("");
                     },
                     label: "CANCELAR",
@@ -159,13 +138,7 @@ class _AlmacenesIDeState extends State<AlmacenesIDe> {
                           color: Colors.blue.shade900,
                         ),
                       ),
-                      subtitle: Text(
-                        widget.controller.almacenes[index].subalmacen,
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.blue.shade900,
-                        ),
-                      ),
+                      
                       trailing: Obx(
                         () => widget.controller.opcionedit.value
                             ? Row(

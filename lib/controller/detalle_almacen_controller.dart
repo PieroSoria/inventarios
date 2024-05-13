@@ -11,25 +11,22 @@ class DetalleAlmacenController extends GetxController {
   });
 
   final almacencon = TextEditingController();
-  final subalmacen = TextEditingController();
 
   void insertaralmacen(Almacenes almacen) {
     almacencon.text = almacen.almacen.toString();
-    subalmacen.text = almacen.subalmacen.toString();
   }
 
   Future<void> actualizaralmacen(String id) async {
     final result = await databaseRepositoryInterface.updatedata(
-      query: 'UPDATE almacenes SET almacen = ?, subalmacen = ? WHERE id = ?',
+      query: 'UPDATE almacenes SET almacen = ? WHERE id = ?',
       arguments: [
         almacencon.text,
-        subalmacen.text,
         id,
       ],
     );
     if (result) {
       almacencon.clear();
-      subalmacen.clear();
+
       Get.snackbar("Exito", "Se Actualizo el almacen");
       Get.offAllNamed(Routes.index);
     } else {

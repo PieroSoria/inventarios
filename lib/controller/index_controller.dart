@@ -36,17 +36,14 @@ class IndexController extends GetxController {
   var apellidouser = "".obs;
   var selectfilename = "".obs;
   var xalmacen = ''.obs;
-  var xsubalmacen = ''.obs;
   var almacenes = <Almacenes>[].obs;
   var listalmacenes = <String>[].obs;
-  var listsubalmacenes = <String>[].obs;
   var productostotal = <Productos>[].obs;
   var listadeinventarios = <Inventarios>[].obs;
   RxList<String> dropdownItems = <String>[].obs;
   var resultbus = Rx<Productos?>(null);
   var nameexcel = TextEditingController();
   final searchalmacen = TextEditingController();
-  final searchsubalmacen = TextEditingController();
   final stockController = TextEditingController();
   final selectalmacen = TextEditingController();
   final selectconteo = TextEditingController();
@@ -58,7 +55,6 @@ class IndexController extends GetxController {
   var selectedItem = ''.obs;
   var selectedItem2 = ''.obs;
   var selectalmacenfiltro = ''.obs;
-  var selectsubalmacenfiltro = ''.obs;
   var currentDateTime = ''.obs;
   var isDisposed = false.obs;
 
@@ -237,12 +233,12 @@ class IndexController extends GetxController {
   Future<void> cargartodoslosproducts(
       {required String? search,
       required String? almacen,
-      required String? subalmacen}) async {
+     }) async {
     productostotal.clear();
     final result = await databaseRepositoryInterface.cargarDatosInventarios(
       searchTerm: search,
       almacen: almacen,
-      subalmacen: subalmacen,
+      
     );
     productostotal.assignAll(result);
   }
@@ -251,7 +247,7 @@ class IndexController extends GetxController {
     final almacen = Almacenes(
       id: "",
       almacen: searchalmacen.text,
-      subalmacen: searchsubalmacen.text,
+      
     );
     bool result =
         await databaseRepositoryInterface.insertalmacen(almacen: almacen);
@@ -259,7 +255,7 @@ class IndexController extends GetxController {
       cargaralmacenes();
       Get.snackbar("Exito", "Se guardo correctamente el almacen");
       searchalmacen.text = '';
-      searchsubalmacen.text = '';
+    
     } else {
       Get.snackbar("Opps!", "Ocurrio un problema");
     }
@@ -274,7 +270,7 @@ class IndexController extends GetxController {
   Future<void> cargaralmacenesitem() async {
     listalmacenes.clear();
     final items = await databaseRepositoryInterface
-        .listadelamacenes(where: null)
+        .listadelamacenes()
         .then((value) {
       final itemunicos = value.map((e) => e.toString()).toSet().toList();
       return itemunicos;
@@ -282,12 +278,6 @@ class IndexController extends GetxController {
     listalmacenes.assignAll(items);
   }
 
-  Future<void> cargarsubalmacenesitem({required String where}) async {
-    listsubalmacenes.clear();
-    final items =
-        await databaseRepositoryInterface.listadelamacenes(where: where);
-    listsubalmacenes.assignAll(items);
-  }
 
   Future<void> eliminardatatablabyid(
       {required String tabla, required String id, required int index}) async {
@@ -303,7 +293,7 @@ class IndexController extends GetxController {
   Future<void> sumarconteo({required String codbarra}) async {
     await databaseRepositoryInterface.sumarconteo(
       almacen: xalmacen.value,
-      subalmacen: xsubalmacen.value,
+      
       codbarra: codbarra,
     );
     await buscarproducto(codbarra: codbarra);
@@ -338,13 +328,9 @@ class IndexController extends GetxController {
           columna: 'almacen',
           where: null,
         );
-        final data2 = await databaseRepositoryInterface.querydata(
-          tabla: 'almacenes',
-          columna: 'subalmacen',
-          where: data,
-        );
+        
         xalmacen(data);
-        xsubalmacen(data2);
+     
       case 2:
         final data = await databaseRepositoryInterface.querydata(
           tabla: 'almacenes',
@@ -358,7 +344,7 @@ class IndexController extends GetxController {
   Future<void> actualizarConteo({required String conteo}) async {
     final result = await databaseRepositoryInterface.actualizarconteo(
       ubicacion: xalmacen.value,
-      sububicacion: xsubalmacen.value,
+      
       codigoBarra: resultbus.value!.codbarra.toString(),
       conteo: conteo,
     );

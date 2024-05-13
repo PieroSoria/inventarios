@@ -52,10 +52,7 @@ class DetalleAlmacenScreen extends GetWidget<DetalleAlmacenController> {
                       controller: controller.almacencon,
                       labeltext: "Ingrese Almacen",
                     ),
-                    InputEditCustom(
-                      controller: controller.subalmacen,
-                      labeltext: "Ingrese Sub almacen",
-                    ),
+                    
                     Btnform(
                       funcion: () {
                         controller.actualizaralmacen(almacen.id.toString());

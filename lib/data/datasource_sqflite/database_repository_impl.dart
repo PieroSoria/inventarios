@@ -24,7 +24,7 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
     await db.execute(
         'CREATE TABLE IF NOT EXISTS inventarios (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT,basedatos TEXT, almacen TEXT, activo TEXT,fecha TEXT)');
     await db.execute(
-        'CREATE TABLE IF NOT EXISTS almacenes (id INTEGER PRIMARY KEY AUTOINCREMENT, almacen TEXT,subalmacen TEXT)');
+        'CREATE TABLE IF NOT EXISTS almacenes (id INTEGER PRIMARY KEY AUTOINCREMENT, almacen TEXT)');
   }
 
   @override
@@ -32,16 +32,15 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
     Database? mydb = await iniciarbasededatos();
     try {
       final result = await mydb.rawQuery(
-        'SELECT COUNT(*) AS count FROM almacenes WHERE almacen = ? AND subalmacen = ?',
-        [almacen.almacen.toString(), almacen.subalmacen.toString()],
+        'SELECT COUNT(*) AS count FROM almacenes WHERE almacen = ?',
+        [almacen.almacen.toString()],
       );
       int count = Sqflite.firstIntValue(result)!;
       if (count == 0) {
         int res = await mydb.rawInsert(
-          'INSERT INTO almacenes (almacen,subalmacen) VALUES(?,?)',
+          'INSERT INTO almacenes (almacen) VALUES(?)',
           [
             almacen.almacen.toString(),
-            almacen.subalmacen.toString(),
           ],
         );
         return res > 0;
@@ -167,7 +166,7 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
   @override
   Future<bool> actualizarconteo(
       {required String ubicacion,
-      required String sububicacion,
+     
       required String codigoBarra,
       required String conteo}) async {
     Database mydb = await iniciarbasededatos();
@@ -192,7 +191,7 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
       String resultado2f = resultado2.toString();
 
       int rep = await mydb.rawUpdate(
-          "UPDATE $tabla SET conteo = '$resultado2f', diferencia = '$resultadof',almacen = '$ubicacion',subalmacen = '$sububicacion' WHERE codbarra = '$codigoBarra'");
+          "UPDATE $tabla SET conteo = '$resultado2f', diferencia = '$resultadof',almacen = '$ubicacion' WHERE codbarra = '$codigoBarra'");
       return rep > 0;
     } catch (e) {
       debugPrint("Error de actualizar conteo $e");
@@ -205,7 +204,7 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
   @override
   Future<bool> sumarconteo(
       {required String almacen,
-      required String subalmacen,
+     
       required String codbarra}) async {
     Database mydb = await iniciarbasededatos();
     try {
@@ -228,12 +227,12 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
       int diferencia = resultado - int.parse(stock!);
       String diferenciaf = diferencia.toString();
       int rep = await mydb.rawUpdate(
-          'UPDATE $tabla SET conteo = ?, diferencia = ?, almacen = ?, subalmacen = ? WHERE codbarra = ?',
+          'UPDATE $tabla SET conteo = ?, diferencia = ?, almacen = ? WHERE codbarra = ?',
           [
             resultadof,
             diferenciaf,
             almacen,
-            subalmacen,
+          
             codbarra,
           ]);
       return rep > 0;
@@ -528,7 +527,7 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
   Future<List<Productos>> cargarDatosInventarios({
     required String? searchTerm,
     required String? almacen,
-    required String? subalmacen,
+   
   }) async {
     Database mydb = await iniciarbasededatos();
     try {
@@ -556,19 +555,13 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
                       .toLowerCase()
                       .contains(searchTerm.toLowerCase()))
               .toList();
-        } else if (almacen != null && subalmacen == null) {
+        } else if (almacen != null) {
           productos = productos
               .where(
                 (producto) => producto.almacen.toLowerCase().contains(almacen),
               )
               .toList();
-        } else if (almacen != null && subalmacen != null) {
-          productos = productos
-              .where((producto) => producto.almacen
-                  .toLowerCase()
-                  .contains(almacen.toLowerCase()))
-              .toList();
-        }
+        } 
         result.addAll(productos);
       }
       return result;
@@ -676,36 +669,18 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
   }
 
   @override
-  Future<List<String>> listadelamacenes({required String? where}) async {
+  Future<List<String>> listadelamacenes() async {
     Database mydb = await iniciarbasededatos();
     try {
-      if (where != null) {
-        final result = await mydb
-            .query(
-          'almacenes',
-          columns: ['subalmacen'],
-          where: 'almacen = ? ',
-          whereArgs: [where],
-        )
-            .then((value) {
-          final data = value
-              .map((e) => Almacenes.fromMap(e).subalmacen.toString())
-              .toList();
-          return data;
-        });
-        return result;
-      } else {
-        final result = await mydb.query(
-          'almacenes',
-          columns: ['almacen'],
-        ).then((value) {
-          final data = value
-              .map((e) => Almacenes.fromMap(e).almacen.toString())
-              .toList();
-          return data;
-        });
-        return result;
-      }
+      final result = await mydb.query(
+        'almacenes',
+        columns: ['almacen'],
+      ).then((value) {
+        final data =
+            value.map((e) => Almacenes.fromMap(e).almacen.toString()).toList();
+        return data;
+      });
+      return result;
     } catch (e) {
       return [];
     } finally {
@@ -748,10 +723,8 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
         final result = await mydb
             .query(tabla,
                 columns: [columna], where: 'almacen = ?', whereArgs: [where])
-            .then((value) => value
-                .map((e) => Almacenes.fromMap(e).subalmacen)
-                .first
-                .toString());
+            .then((value) =>
+                value.map((e) => Almacenes.fromMap(e)).first.toString());
         return result;
       } else {
         final result = await mydb.query(tabla, columns: [columna]).then(

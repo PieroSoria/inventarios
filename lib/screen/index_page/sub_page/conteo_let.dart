@@ -34,13 +34,12 @@ class _ConteoState extends State<Conteo> {
 
   void eliminardata() {
     widget.controller.xalmacen("");
-    widget.controller.xsubalmacen("");
+  
     widget.controller.resultbus(null);
   }
 
   Future<dynamic> funciondeconteo(String value) async {
-    if (widget.controller.xalmacen.value != "" &&
-        widget.controller.xsubalmacen.value != "") {
+    if (widget.controller.xalmacen.value != "" ) {
       if (_switchValue == false) {
         showModalBottomSheet(
             context: context,
@@ -149,13 +148,7 @@ class _ConteoState extends State<Conteo> {
                           fontSize: 20,
                         ),
                       ),
-                      Text(
-                        widget.controller.xsubalmacen.value,
-                        style: const TextStyle(
-                          fontFamily: "Poppins",
-                          fontSize: 20,
-                        ),
-                      ),
+                      
                     ],
                   ),
                 ),

@@ -18,7 +18,6 @@ class _ProductosIDeState extends State<ProductosIDe> {
     widget.controller.cargartodoslosproducts(
       search: null,
       almacen: null,
-      subalmacen: null,
     );
     widget.controller.cargaralmacenesitem();
     super.initState();
@@ -32,7 +31,6 @@ class _ProductosIDeState extends State<ProductosIDe> {
 
   void eliminardata() async {
     widget.controller.selectalmacenfiltro("");
-    widget.controller.selectsubalmacenfiltro("");
   }
 
   @override
@@ -75,7 +73,6 @@ class _ProductosIDeState extends State<ProductosIDe> {
                   widget.controller.cargartodoslosproducts(
                     search: value,
                     almacen: widget.controller.selectedItem.value,
-                    subalmacen: widget.controller.selectedItem2.value,
                   );
                 },
               ),
@@ -103,14 +100,10 @@ class _ProductosIDeState extends State<ProductosIDe> {
                       }).toList(),
                       onChanged: (value) async {
                         widget.controller.selectalmacenfiltro(value.toString());
-                        await widget.controller.cargarsubalmacenesitem(
-                          where: value.toString(),
-                        );
+
                         await widget.controller.cargartodoslosproducts(
                           search: null,
                           almacen: widget.controller.selectalmacenfiltro.value,
-                          subalmacen:
-                              widget.controller.selectsubalmacenfiltro.value,
                         );
                       },
                       borderRadius: BorderRadius.circular(20),
@@ -120,55 +113,12 @@ class _ProductosIDeState extends State<ProductosIDe> {
                           widget.controller.cargartodoslosproducts(
                             search: null,
                             almacen: null,
-                            subalmacen: null,
                           );
                         },
                         icon: const Icon(Icons.backspace_outlined),
                       ),
                     ),
                   ),
-                  Obx(
-                    () => DropdownButton(
-                      value:
-                          widget.controller.selectsubalmacenfiltro.value != ""
-                              ? widget.controller.selectsubalmacenfiltro.value
-                              : null,
-                      isExpanded: true,
-                      hint: const Center(child: Text("Seleccionar una opcion")),
-                      items: widget.controller.listsubalmacenes.map((item) {
-                        return DropdownMenuItem<dynamic>(
-                          value: item,
-                          child: Center(
-                            child: Text(
-                              item.toString(),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        widget.controller
-                            .selectsubalmacenfiltro(value.toString());
-                        widget.controller.cargartodoslosproducts(
-                          search: null,
-                          almacen: widget.controller.selectalmacenfiltro.value,
-                          subalmacen:
-                              widget.controller.selectsubalmacenfiltro.value,
-                        );
-                      },
-                      icon: IconButton(
-                        onPressed: () {
-                          widget.controller.selectalmacenfiltro("");
-                          widget.controller.selectsubalmacenfiltro("");
-                          widget.controller.cargartodoslosproducts(
-                            search: null,
-                            almacen: null,
-                            subalmacen: null,
-                          );
-                        },
-                        icon: const Icon(Icons.backspace_outlined),
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),

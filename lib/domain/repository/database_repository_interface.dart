@@ -12,13 +12,9 @@ abstract class DatabaseRepositoryInterface {
   Future<bool> insertalmacen({required Almacenes almacen});
   Future<bool> actualizarconteo(
       {required String ubicacion,
-      required String sububicacion,
       required String codigoBarra,
       required String conteo});
-  Future<bool> sumarconteo(
-      {required String almacen,
-      required String subalmacen,
-      required String codbarra});
+  Future<bool> sumarconteo({required String almacen, required String codbarra});
   Future<String?> obtenerconteo({
     required Database mydb,
     required String tabla,
@@ -56,7 +52,7 @@ abstract class DatabaseRepositoryInterface {
   Future<List<Productos>> cargarDatosInventarios({
     required String? searchTerm,
     required String? almacen,
-    required String? subalmacen,
+    
   });
   Future<List<Almacenes>> cargardatosdealmacen();
   Future<UserData?> iniciarSessionLogin({
@@ -69,7 +65,7 @@ abstract class DatabaseRepositoryInterface {
   Future<String?> obtenernombredelinventarioactivomydb();
   Future<bool> cantidaddeusuario();
   Future<bool> cambiarfechacad({required String nuevafecha});
-  Future<List<String>> listadelamacenes({required String? where});
+  Future<List<String>> listadelamacenes();
   Future<int?> verificarlainsertcionubicacion();
   Future<String?> querydata(
       {required String tabla, required String columna, required String? where});

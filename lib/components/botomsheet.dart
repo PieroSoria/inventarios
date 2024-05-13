@@ -32,7 +32,7 @@ class _BotomSheetState extends State<BotomSheet> {
     widget.controller.selectedItem("");
     widget.controller.selectedItem2("");
     widget.controller.listalmacenes.clear();
-    widget.controller.listsubalmacenes.clear();
+   
   }
 
   @override
@@ -78,8 +78,7 @@ class _BotomSheetState extends State<BotomSheet> {
                         onChanged: (dynamic selectedItem) {
                           setState(() {
                             widget.controller.selectedItem(selectedItem);
-                            widget.controller
-                                .cargarsubalmacenesitem(where: selectedItem);
+                            
                           });
                         },
                         style: TextStyle(
@@ -89,47 +88,12 @@ class _BotomSheetState extends State<BotomSheet> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 20),
-                    child: Obx(
-                      () => DropdownButton<dynamic>(
-                        isExpanded: true,
-                        value: widget.controller.selectedItem2.value != ''
-                            ? widget.controller.selectedItem2.value
-                            : null,
-                        hint: const Center(
-                          child: Text("Selecciona una sub ubicacion"),
-                        ),
-                        items: widget.controller.listsubalmacenes
-                            .map((dynamic item) {
-                          return DropdownMenuItem<dynamic>(
-                            value: item,
-                            child: Center(
-                              child: Text(
-                                item.toString(),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (dynamic selectedItem) {
-                          setState(() {
-                            widget.controller.selectedItem2(selectedItem);
-                          });
-                        },
-                        style: TextStyle(
-                          color: Colors.blue.shade900,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // 
                   Btnform(
                     funcion: () {
                       widget.controller
                           .xalmacen(widget.controller.selectedItem.value);
-                      widget.controller
-                          .xsubalmacen(widget.controller.selectedItem2.value);
+                      
                       widget.controller.selectedItem("");
                       widget.controller.selectedItem2("");
                       Navigator.of(context).pop();

@@ -104,7 +104,7 @@ class DetalleProController extends GetxController {
 
   Future<void> cargarlistaalmacen() async {
     final result =
-        await databaseRepositoryInterface.listadelamacenes(where: null);
+        await databaseRepositoryInterface.listadelamacenes();
     dropitemalmacen.assignAll(result);
   }
 }
