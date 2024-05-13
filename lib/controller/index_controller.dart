@@ -230,15 +230,14 @@ class IndexController extends GetxController {
     listadeinventarios.addAll(inventario);
   }
 
-  Future<void> cargartodoslosproducts(
-      {required String? search,
-      required String? almacen,
-     }) async {
+  Future<void> cargartodoslosproducts({
+    required String? search,
+    required String? almacen,
+  }) async {
     productostotal.clear();
     final result = await databaseRepositoryInterface.cargarDatosInventarios(
       searchTerm: search,
       almacen: almacen,
-      
     );
     productostotal.assignAll(result);
   }
@@ -247,7 +246,6 @@ class IndexController extends GetxController {
     final almacen = Almacenes(
       id: "",
       almacen: searchalmacen.text,
-      
     );
     bool result =
         await databaseRepositoryInterface.insertalmacen(almacen: almacen);
@@ -255,7 +253,6 @@ class IndexController extends GetxController {
       cargaralmacenes();
       Get.snackbar("Exito", "Se guardo correctamente el almacen");
       searchalmacen.text = '';
-    
     } else {
       Get.snackbar("Opps!", "Ocurrio un problema");
     }
@@ -269,15 +266,13 @@ class IndexController extends GetxController {
 
   Future<void> cargaralmacenesitem() async {
     listalmacenes.clear();
-    final items = await databaseRepositoryInterface
-        .listadelamacenes()
-        .then((value) {
+    final items =
+        await databaseRepositoryInterface.listadelamacenes().then((value) {
       final itemunicos = value.map((e) => e.toString()).toSet().toList();
       return itemunicos;
     });
     listalmacenes.assignAll(items);
   }
-
 
   Future<void> eliminardatatablabyid(
       {required String tabla, required String id, required int index}) async {
@@ -293,7 +288,6 @@ class IndexController extends GetxController {
   Future<void> sumarconteo({required String codbarra}) async {
     await databaseRepositoryInterface.sumarconteo(
       almacen: xalmacen.value,
-      
       codbarra: codbarra,
     );
     await buscarproducto(codbarra: codbarra);
@@ -328,23 +322,15 @@ class IndexController extends GetxController {
           columna: 'almacen',
           where: null,
         );
-        
         xalmacen(data);
-     
       case 2:
-        final data = await databaseRepositoryInterface.querydata(
-          tabla: 'almacenes',
-          columna: 'almacen',
-          where: null,
-        );
-        xalmacen(data);
+        xalmacen("");
     }
   }
 
   Future<void> actualizarConteo({required String conteo}) async {
     final result = await databaseRepositoryInterface.actualizarconteo(
       ubicacion: xalmacen.value,
-      
       codigoBarra: resultbus.value!.codbarra.toString(),
       conteo: conteo,
     );

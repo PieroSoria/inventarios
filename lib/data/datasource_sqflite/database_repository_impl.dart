@@ -166,7 +166,6 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
   @override
   Future<bool> actualizarconteo(
       {required String ubicacion,
-     
       required String codigoBarra,
       required String conteo}) async {
     Database mydb = await iniciarbasededatos();
@@ -203,9 +202,7 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
 
   @override
   Future<bool> sumarconteo(
-      {required String almacen,
-     
-      required String codbarra}) async {
+      {required String almacen, required String codbarra}) async {
     Database mydb = await iniciarbasededatos();
     try {
       String? tabla = await obtenerNombreInventarioActivo(
@@ -232,7 +229,6 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
             resultadof,
             diferenciaf,
             almacen,
-          
             codbarra,
           ]);
       return rep > 0;
@@ -527,7 +523,6 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
   Future<List<Productos>> cargarDatosInventarios({
     required String? searchTerm,
     required String? almacen,
-   
   }) async {
     Database mydb = await iniciarbasededatos();
     try {
@@ -561,7 +556,7 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
                 (producto) => producto.almacen.toLowerCase().contains(almacen),
               )
               .toList();
-        } 
+        }
         result.addAll(productos);
       }
       return result;
@@ -694,14 +689,10 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
     try {
       final almacenCount = Sqflite.firstIntValue(
           await mydb.rawQuery('SELECT COUNT(DISTINCT almacen) FROM almacenes'));
-      final subalmacenByAlmacenCount = Sqflite.firstIntValue(await mydb.rawQuery(
-          'SELECT COUNT(DISTINCT subalmacen) FROM almacenes GROUP BY almacen'));
-      if (almacenCount == 1 && subalmacenByAlmacenCount == 1) {
+      if (almacenCount == 1) {
         return 1;
-      } else if (almacenCount == 1 && subalmacenByAlmacenCount! > 1) {
-        return 2;
       } else {
-        return 3;
+        return 2;
       }
     } catch (e) {
       debugPrint("Error de verificacion: $e");
