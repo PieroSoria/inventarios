@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inventariosnew/components/botomtipoproducto.dart';
 
 import 'package:inventariosnew/controller/index_controller.dart';
 
@@ -85,8 +86,10 @@ class _ContadorState extends State<Contador> {
                         fontWeight: FontWeight.bold, fontSize: 20),
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20))),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -137,9 +140,19 @@ class _ContadorState extends State<Contador> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  await widget.controller.actualizarConteo(
-                    conteo: stockController.text,
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return BotomtypePorduct(
+                        controller: widget.controller,
+                        value: widget.controller.resultbus.value!.codbarra
+                            .toString(),
+                        barrido: false,
+                        stock: stockController,
+                      );
+                    },
                   );
+
                   await widget.controller.buscarproducto(
                     codbarra:
                         widget.controller.resultbus.value!.codbarra.toString(),

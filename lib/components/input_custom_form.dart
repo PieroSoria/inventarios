@@ -27,6 +27,7 @@ class InputEditCustom extends StatelessWidget {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
           ),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
         ),
       ),
     );

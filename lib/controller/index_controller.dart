@@ -29,7 +29,6 @@ class IndexController extends GetxController {
   var cargando = false.obs;
   var openset = false.obs;
   var opcionedit = false.obs;
-
   var imagenPath = "".obs;
   var nombreuser = "".obs;
   var emailuser = "".obs;
@@ -51,6 +50,8 @@ class IndexController extends GetxController {
   final buscarController = TextEditingController();
   final fechaproconteo = TextEditingController();
   final fechacadconteo = TextEditingController();
+  final comentario = TextEditingController();
+  final serie = TextEditingController();
   var searchText = ''.obs;
   var selectedItem = ''.obs;
   var selectedItem2 = ''.obs;
@@ -289,7 +290,12 @@ class IndexController extends GetxController {
     await databaseRepositoryInterface.sumarconteo(
       almacen: xalmacen.value,
       codbarra: codbarra,
+      comentario: comentario.text,
     );
+    comentario.clear();
+    serie.clear();
+    fechaproconteo.clear();
+    fechacadconteo.clear();
     await buscarproducto(codbarra: codbarra);
   }
 
@@ -300,6 +306,16 @@ class IndexController extends GetxController {
       resultbus(result);
     } else {
       Get.snackbar("Opps!", "No se encontro el producto");
+    }
+  }
+
+  Future<String> buscarproductoType({required String codbarra}) async {
+    final result =
+        await databaseRepositoryInterface.buscarProducto(codigoBarra: codbarra);
+    if (result != null) {
+      return result.tipoproducto.toString();
+    } else {
+      return "";
     }
   }
 
@@ -333,7 +349,12 @@ class IndexController extends GetxController {
       ubicacion: xalmacen.value,
       codigoBarra: resultbus.value!.codbarra.toString(),
       conteo: conteo,
+      comentario: comentario.text,
     );
+    comentario.clear();
+    serie.clear();
+    fechaproconteo.clear();
+    fechacadconteo.clear();
     if (result) {
       Get.snackbar("Exito", "Se Actualizo el conteo");
     } else {

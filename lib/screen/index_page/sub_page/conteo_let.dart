@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:inventariosnew/components/botomsheet.dart';
+import 'package:inventariosnew/components/botomtipoproducto.dart';
 import 'package:inventariosnew/components/contador.dart';
-import 'package:inventariosnew/components/input_edit_dateCustom.dart';
 import 'package:inventariosnew/controller/index_controller.dart';
 
 class Conteo extends StatefulWidget {
@@ -34,49 +33,22 @@ class _ConteoState extends State<Conteo> {
 
   void eliminardata() {
     widget.controller.xalmacen("");
-  
     widget.controller.resultbus(null);
   }
 
   Future<dynamic> funciondeconteo(String value) async {
-    if (widget.controller.xalmacen.value != "" ) {
+    if (widget.controller.xalmacen.value != "") {
       if (_switchValue == false) {
         showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return SizedBox(
-                child: Column(
-                  children: [
-                    TextField(),
-                    InputEditDateCustom(
-                      controller: widget.controller.fechacadconteo,
-                      labeltext: "Ingrese fecha de produccion",
-                      nuevoitem: "",
-                      press: () async {
-                        DateTime? pickdate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100));
-                        if (pickdate != null) {
-                          widget.controller.fechacadconteo.text =
-                              DateFormat('yyyy-MM-dd').format(pickdate);
-                        }
-                      },
-                    ),
-                    TextField(),
-                    ElevatedButton(
-                      onPressed: () async {
-                        await widget.controller.sumarconteo(codbarra: value);
-                      },
-                      child: Text(
-                        "Guardar",
-                      ),
-                    )
-                  ],
-                ),
-              );
-            });
+          context: context,
+          builder: (context) {
+            return BotomtypePorduct(
+              controller: widget.controller,
+              value: value,
+              barrido: true,
+            );
+          },
+        );
       } else {
         await widget.controller.buscarproducto(codbarra: value);
       }
@@ -102,7 +74,6 @@ class _ConteoState extends State<Conteo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
         child: SingleChildScrollView(
@@ -148,7 +119,6 @@ class _ConteoState extends State<Conteo> {
                           fontSize: 20,
                         ),
                       ),
-                      
                     ],
                   ),
                 ),

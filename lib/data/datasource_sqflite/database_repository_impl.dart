@@ -164,10 +164,12 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
   }
 
   @override
-  Future<bool> actualizarconteo(
-      {required String ubicacion,
-      required String codigoBarra,
-      required String conteo}) async {
+  Future<bool> actualizarconteo({
+    required String ubicacion,
+    required String codigoBarra,
+    required String conteo,
+    required String comentario,
+  }) async {
     Database mydb = await iniciarbasededatos();
     try {
       String? tabla = await obtenerNombreInventarioActivo(mydb: mydb);
@@ -190,7 +192,8 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
       String resultado2f = resultado2.toString();
 
       int rep = await mydb.rawUpdate(
-          "UPDATE $tabla SET conteo = '$resultado2f', diferencia = '$resultadof',almacen = '$ubicacion' WHERE codbarra = '$codigoBarra'");
+          "UPDATE $tabla SET conteo = ?, diferencia = ?,almacen = ?, comentario = ? WHERE codbarra = ?",
+          [resultado2f, resultadof, ubicacion, comentario, codigoBarra]);
       return rep > 0;
     } catch (e) {
       debugPrint("Error de actualizar conteo $e");
@@ -201,8 +204,11 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
   }
 
   @override
-  Future<bool> sumarconteo(
-      {required String almacen, required String codbarra}) async {
+  Future<bool> sumarconteo({
+    required String almacen,
+    required String codbarra,
+    required String comentario,
+  }) async {
     Database mydb = await iniciarbasededatos();
     try {
       String? tabla = await obtenerNombreInventarioActivo(
@@ -224,11 +230,12 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
       int diferencia = resultado - int.parse(stock!);
       String diferenciaf = diferencia.toString();
       int rep = await mydb.rawUpdate(
-          'UPDATE $tabla SET conteo = ?, diferencia = ?, almacen = ? WHERE codbarra = ?',
+          'UPDATE $tabla SET conteo = ?, diferencia = ?, almacen = ?, comentario = ? WHERE codbarra = ?',
           [
             resultadof,
             diferenciaf,
             almacen,
+            comentario,
             codbarra,
           ]);
       return rep > 0;
