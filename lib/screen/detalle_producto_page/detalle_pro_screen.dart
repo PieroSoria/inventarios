@@ -27,7 +27,7 @@ class DetalleProScreen extends GetWidget<DetalleProController> {
           automaticallyImplyLeading: false,
           leading: IconButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Get.offAllNamed(Routes.index);
             },
             icon: const Icon(
               Icons.arrow_back_ios_new_sharp,

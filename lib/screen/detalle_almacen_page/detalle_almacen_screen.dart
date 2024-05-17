@@ -24,7 +24,7 @@ class DetalleAlmacenScreen extends GetWidget<DetalleAlmacenController> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           leading: IconButton(
-            onPressed: () => Get.back(),
+            onPressed: () => Get.offAllNamed(Routes.index),
             icon: const Icon(
               Icons.arrow_back_ios_new_outlined,
             ),
@@ -62,7 +62,7 @@ class DetalleAlmacenScreen extends GetWidget<DetalleAlmacenController> {
                     )
                   ],
                 );
-              }),
+              },),
         ),
       ),
     );

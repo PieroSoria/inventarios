@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:inventariosnew/components/input_custom_form.dart';
 import 'package:inventariosnew/components/input_edit_datecustom.dart';
@@ -9,7 +10,8 @@ class BotomtypePorduct extends StatefulWidget {
     super.key,
     required this.controller,
     required this.value,
-    required this.barrido, this.stock,
+    required this.barrido,
+    this.stock,
   });
 
   final IndexController controller;
@@ -33,12 +35,14 @@ class _BotomtypePorductState extends State<BotomtypePorduct> {
   void capturartypo() async {
     typeProduct =
         await widget.controller.buscarproductoType(codbarra: widget.value);
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         children: [
           typeProduct == "1"
@@ -126,10 +130,12 @@ class _BotomtypePorductState extends State<BotomtypePorduct> {
             onPressed: () async {
               if (widget.barrido) {
                 await widget.controller.sumarconteo(codbarra: widget.value);
+                Get.back();
               } else {
                 await widget.controller.actualizarConteo(
                   conteo: widget.stock!.text,
                 );
+                Get.back();
               }
             },
             child: const Text(

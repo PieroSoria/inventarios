@@ -46,69 +46,80 @@ class _DashboardState extends State<Dashboard> {
             );
         }
       }),
-      floatingActionButton: Obx(
-        () => AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          width: 60,
-          height: widget.controller.openset.value ? 160.0 : 60.0,
-          curve: Curves.ease,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            color: Colors.blue.shade900,
-          ),
-          child: widget.controller.openset.value
-              ? SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          widget.controller.indexpagedashboard(0);
-                          widget.controller
-                              .openset(!widget.controller.openset.value);
-                        },
-                        icon: const Icon(
-                          Icons.home,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          widget.controller.indexpagedashboard(1);
-                          widget.controller
-                              .openset(!widget.controller.openset.value);
-                        },
-                        icon: const Icon(
-                          Icons.shopping_cart,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          widget.controller
-                              .openset(!widget.controller.openset.value);
-                        },
-                        icon: const Icon(
-                          Icons.cancel,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              : IconButton(
-                  onPressed: () {
-                    widget.controller.openset(!widget.controller.openset.value);
-                  },
-                  icon: const Icon(
-                    Icons.menu,
-                    size: 30,
-                    color: Colors.white,
-                  ),
-                ),
+      floatingActionButton: MenuDashBoardButton(controller: widget.controller),
+    );
+  }
+}
+
+class MenuDashBoardButton extends StatelessWidget {
+  const MenuDashBoardButton({
+    super.key,
+    required this.controller,
+  });
+
+  final IndexController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: 60,
+        height: controller.openset.value ? 160.0 : 60.0,
+        curve: Curves.ease,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          color: Colors.blue.shade900,
         ),
+        child: controller.openset.value
+            ? SingleChildScrollView(
+                child: Column(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        controller.indexpagedashboard(0);
+                        controller.openset(controller.openset.value);
+                      },
+                      icon: const Icon(
+                        Icons.home,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        controller.indexpagedashboard(1);
+                        controller.openset(controller.openset.value);
+                      },
+                      icon: const Icon(
+                        Icons.shopping_cart,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        controller.openset(controller.openset.value);
+                      },
+                      icon: const Icon(
+                        Icons.cancel,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    )
+                  ],
+                ),
+              )
+            : IconButton(
+                onPressed: () {
+                  controller.openset(controller.openset.value);
+                },
+                icon: const Icon(
+                  Icons.menu,
+                  size: 30,
+                  color: Colors.white,
+                ),
+              ),
       ),
     );
   }
