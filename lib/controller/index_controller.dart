@@ -51,7 +51,7 @@ class IndexController extends GetxController {
   final fechaproconteo = TextEditingController();
   final fechacadconteo = TextEditingController();
   final comentario = TextEditingController();
-  final serie = TextEditingController();
+  final valor = TextEditingController();
   var searchText = ''.obs;
   var selectedItem = ''.obs;
   var selectedItem2 = ''.obs;
@@ -286,14 +286,19 @@ class IndexController extends GetxController {
     }
   }
 
-  Future<void> sumarconteo({required String codbarra}) async {
+  Future<void> sumarconteo({
+    required String codbarra,
+  }) async {
     await databaseRepositoryInterface.sumarconteo(
       almacen: xalmacen.value,
       codbarra: codbarra,
       comentario: comentario.text,
+      fechapro: fechaproconteo.text,
+      fechacad: fechacadconteo.text,
+      valor: valor.text,
     );
     comentario.clear();
-    serie.clear();
+    valor.clear();
     fechaproconteo.clear();
     fechacadconteo.clear();
     await buscarproducto(codbarra: codbarra);
@@ -350,9 +355,12 @@ class IndexController extends GetxController {
       codigoBarra: resultbus.value!.codbarra.toString(),
       conteo: conteo,
       comentario: comentario.text,
+      fechapro: fechaproconteo.text,
+      fechacad: fechacadconteo.text,
+      valor: valor.text,
     );
     comentario.clear();
-    serie.clear();
+    valor.clear();
     fechaproconteo.clear();
     fechacadconteo.clear();
     if (result) {

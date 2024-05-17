@@ -15,11 +15,17 @@ abstract class DatabaseRepositoryInterface {
     required String codigoBarra,
     required String conteo,
     required String comentario,
+    required String fechapro,
+    required String fechacad,
+    required String valor,
   });
   Future<bool> sumarconteo(
       {required String almacen,
       required String codbarra,
-      required String comentario});
+      required String comentario,
+      required String fechapro,
+    required String fechacad,
+    required String valor,});
   Future<String?> obtenerconteo({
     required Database mydb,
     required String tabla,

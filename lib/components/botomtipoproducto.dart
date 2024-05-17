@@ -42,6 +42,7 @@ class _BotomtypePorductState extends State<BotomtypePorduct> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
+      height: 570,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         children: [
@@ -54,6 +55,13 @@ class _BotomtypePorductState extends State<BotomtypePorduct> {
                       child: InputEditCustom(
                         controller: widget.controller.comentario,
                         labeltext: 'Comentario (opcional)',
+                      ),
+                    ),
+                    SizedBox(
+                      width: 318,
+                      child: InputEditCustom(
+                        controller: widget.controller.valor,
+                        labeltext: 'Ingrese Lote',
                       ),
                     ),
                     SizedBox(
@@ -109,7 +117,7 @@ class _BotomtypePorductState extends State<BotomtypePorduct> {
                         SizedBox(
                           width: 318,
                           child: InputEditCustom(
-                            controller: widget.controller.serie,
+                            controller: widget.controller.valor,
                             labeltext: 'Ingrese Serie',
                           ),
                         ),

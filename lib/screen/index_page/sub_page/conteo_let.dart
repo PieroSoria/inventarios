@@ -41,6 +41,7 @@ class _ConteoState extends State<Conteo> {
       if (_switchValue == false) {
         showModalBottomSheet(
           context: context,
+          isScrollControlled: true,
           builder: (context) {
             return BotomtypePorduct(
               controller: widget.controller,

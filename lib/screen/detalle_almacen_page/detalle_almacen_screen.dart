@@ -41,28 +41,28 @@ class DetalleAlmacenScreen extends GetWidget<DetalleAlmacenController> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           decoration: const BoxDecoration(),
           child: GetBuilder(
-              init: controller,
-              initState: (state) {
-                controller.insertaralmacen(almacen);
-              },
-              builder: (context) {
-                return Column(
-                  children: [
-                    InputEditCustom(
-                      controller: controller.almacencon,
-                      labeltext: "Ingrese Almacen",
-                    ),
-                    
-                    Btnform(
-                      funcion: () {
-                        controller.actualizaralmacen(almacen.id.toString());
-                      },
-                      label: "Editar Almacen",
-                      color: Colors.blue.shade900,
-                    )
-                  ],
-                );
-              },),
+            init: controller,
+            initState: (state) {
+              controller.insertaralmacen(almacen);
+            },
+            builder: (context) {
+              return Column(
+                children: [
+                  InputEditCustom(
+                    controller: controller.almacencon,
+                    labeltext: "Ingrese Almacen",
+                  ),
+                  Btnform(
+                    funcion: () {
+                      controller.actualizaralmacen(almacen.id.toString());
+                    },
+                    label: "Editar Almacen",
+                    color: Colors.blue.shade900,
+                  )
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

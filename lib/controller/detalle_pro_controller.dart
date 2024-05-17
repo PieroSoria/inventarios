@@ -41,7 +41,6 @@ class DetalleProController extends GetxController {
     conteo.text = productos.conteo ?? '';
     diferencia.text = productos.diferencia ?? '';
     almacen.text = productos.almacen ?? '';
-
     tipoproducto.text = productos.tipoproducto ?? '';
     valor.text = productos.valor ?? '';
     fechapro.text = productos.fechapro ?? '';

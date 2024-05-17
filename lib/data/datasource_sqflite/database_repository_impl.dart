@@ -169,6 +169,9 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
     required String codigoBarra,
     required String conteo,
     required String comentario,
+    required String fechapro,
+    required String fechacad,
+    required String valor,
   }) async {
     Database mydb = await iniciarbasededatos();
     try {
@@ -192,8 +195,17 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
       String resultado2f = resultado2.toString();
 
       int rep = await mydb.rawUpdate(
-          "UPDATE $tabla SET conteo = ?, diferencia = ?,almacen = ?, comentario = ? WHERE codbarra = ?",
-          [resultado2f, resultadof, ubicacion, comentario, codigoBarra]);
+          "UPDATE $tabla SET conteo = ?, diferencia = ?,almacen = ?,fecha_pro = ?, fecha_cad = ?,valor = ? comentario = ? WHERE codbarra = ?",
+          [
+            resultado2f,
+            resultadof,
+            ubicacion,
+            fechapro,
+            fechacad,
+            valor,
+            comentario,
+            codigoBarra
+          ]);
       return rep > 0;
     } catch (e) {
       debugPrint("Error de actualizar conteo $e");
@@ -208,6 +220,9 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
     required String almacen,
     required String codbarra,
     required String comentario,
+    required String fechapro,
+    required String fechacad,
+    required String valor,
   }) async {
     Database mydb = await iniciarbasededatos();
     try {
@@ -230,11 +245,14 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
       int diferencia = resultado - int.parse(stock!);
       String diferenciaf = diferencia.toString();
       int rep = await mydb.rawUpdate(
-          'UPDATE $tabla SET conteo = ?, diferencia = ?, almacen = ?, comentario = ? WHERE codbarra = ?',
+          'UPDATE $tabla SET conteo = ?, diferencia = ?, almacen = ?,fecha_pro = ?,fecha_cad = ?, valor = ?, comentario = ? WHERE codbarra = ?',
           [
             resultadof,
             diferenciaf,
             almacen,
+            fechapro,
+            fechacad,
+            valor,
             comentario,
             codbarra,
           ]);
