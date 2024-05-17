@@ -195,7 +195,7 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
       String resultado2f = resultado2.toString();
 
       int rep = await mydb.rawUpdate(
-          "UPDATE $tabla SET conteo = ?, diferencia = ?,almacen = ?,fecha_pro = ?, fecha_cad = ?,valor = ? comentario = ? WHERE codbarra = ?",
+          "UPDATE $tabla SET conteo = ?, diferencia = ?,almacen = ?,fecha_pro = ?, fecha_cad = ?,valor = ?, comentario = ? WHERE codbarra = ?",
           [
             resultado2f,
             resultadof,

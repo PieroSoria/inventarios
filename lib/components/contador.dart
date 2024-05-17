@@ -12,42 +12,63 @@ class Contador extends StatefulWidget {
 }
 
 class _ContadorState extends State<Contador> {
-  final stockController = TextEditingController(text: '0');
-
   int stockValue = 0;
   int conteo = 0;
   int originalStockValue = 0;
   void incrementStock() {
     setState(() {
-      if (stockController.text.isNotEmpty) {
-        stockValue = int.tryParse(stockController.text) ?? 0;
+      if (widget.controller.stockController.text.isNotEmpty) {
+        stockValue = int.tryParse(widget.controller.stockController.text) ?? 0;
       }
       stockValue += 1;
       conteo += 1;
-      stockController.text = stockValue.toString();
+      widget.controller.stockController.text = stockValue.toString();
     });
   }
 
   void restarStock() {
     setState(() {
-      if (stockController.text.isNotEmpty) {
-        stockValue = int.tryParse(stockController.text) ?? 0;
+      if (widget.controller.stockController.text.isNotEmpty) {
+        stockValue = int.tryParse(widget.controller.stockController.text) ?? 0;
       }
       if (stockValue > 0) {
         stockValue -= 1;
         conteo -= 1;
       }
-      stockController.text = stockValue.toString();
+      widget.controller.stockController.text = stockValue.toString();
     });
   }
 
   @override
   void initState() {
-    if (widget.controller.stockController.text.isNotEmpty) {
-      stockValue = int.parse(widget.controller.stockController.text);
-      originalStockValue = stockValue;
-    }
+    // init();
     super.initState();
+  }
+
+  // void init() {
+  //   if (widget.controller.stockController.text.isNotEmpty) {
+  //     setState(() {
+  //       stockValue = int.parse(widget.controller.stockController.text);
+  //       debugPrint("Data: $stockValue");
+  //       originalStockValue = stockValue;
+  //       widget.controller.stockController.text = originalStockValue.toString();
+  //     });
+  //   }
+  // }
+
+  @override
+  void dispose() {
+    delete();
+    super.dispose();
+  }
+
+  void delete() {
+    conteo = 0;
+    originalStockValue = 0;
+    stockValue = originalStockValue;
+
+    widget.controller.stockController.text = "0";
+    widget.controller.resultbus.value = null;
   }
 
   @override
@@ -81,7 +102,13 @@ class _ContadorState extends State<Contador> {
                 SizedBox(
                   width: 90,
                   child: TextField(
-                    controller: stockController,
+                    controller: widget.controller.stockController,
+                    onChanged: (value) {
+                      setState(() {
+                        widget.controller.stockController.text = value;
+                        debugPrint(widget.controller.stockController.text);
+                      });
+                    },
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20),
                     keyboardType: TextInputType.number,
@@ -117,12 +144,11 @@ class _ContadorState extends State<Contador> {
             children: [
               ElevatedButton(
                 onPressed: () async {
-                  setState(() {
-                    conteo = 0;
-                    stockValue = originalStockValue;
-                    stockController.text = stockValue.toString();
-                    widget.controller.resultbus(null);
-                  });
+                  conteo = 0;
+                  originalStockValue = 0;
+                  stockValue = originalStockValue;
+                  widget.controller.stockController.text = "0";
+                  widget.controller.resultbus.value = null;
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
@@ -142,13 +168,14 @@ class _ContadorState extends State<Contador> {
                 onPressed: () async {
                   showModalBottomSheet(
                     context: context,
+                    isScrollControlled: true,
                     builder: (context) {
                       return BotomtypePorduct(
                         controller: widget.controller,
                         value: widget.controller.resultbus.value!.codbarra
                             .toString(),
                         barrido: false,
-                        stock: stockController,
+                        stock: widget.controller.stockController,
                       );
                     },
                   );
@@ -160,7 +187,6 @@ class _ContadorState extends State<Contador> {
                   setState(() {
                     conteo = 0;
                     stockValue = originalStockValue;
-                    stockController.text = stockValue.toString();
                   });
                 },
                 style: ElevatedButton.styleFrom(

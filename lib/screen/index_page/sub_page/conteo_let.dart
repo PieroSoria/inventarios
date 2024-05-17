@@ -63,9 +63,7 @@ class _ConteoState extends State<Conteo> {
         ),
         backgroundColor: const Color.fromARGB(0, 194, 193, 193),
         builder: (context) {
-          return BotomSheet(
-            controller: widget.controller,
-          );
+          return BotomSheet(controller: widget.controller);
         },
       );
     }
@@ -148,8 +146,8 @@ class _ConteoState extends State<Conteo> {
                               _switchValue = value;
                               _focusNode = FocusNode();
                               _focusNode.requestFocus();
+                              widget.controller.resultbus.value = null;
                             });
-                            widget.controller.resultbus.value = null;
                           },
                         ),
                         const Text("manual")
@@ -225,9 +223,7 @@ class _ConteoState extends State<Conteo> {
               ),
               Container(
                 child: _switchValue
-                    ? Contador(
-                        controller: widget.controller,
-                      )
+                    ? Contador(controller: widget.controller)
                     : null,
               ),
             ],

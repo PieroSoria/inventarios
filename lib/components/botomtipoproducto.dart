@@ -136,14 +136,13 @@ class _BotomtypePorductState extends State<BotomtypePorduct> {
                     ),
           ElevatedButton(
             onPressed: () async {
+              Get.back();
               if (widget.barrido) {
                 await widget.controller.sumarconteo(codbarra: widget.value);
-                Get.back();
               } else {
                 await widget.controller.actualizarConteo(
                   conteo: widget.stock!.text,
                 );
-                Get.back();
               }
             },
             child: const Text(

@@ -30,6 +30,7 @@ class _InputEditDateCustomState extends State<InputEditDateCustom> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: TextField(
+        readOnly: true,
         controller: widget.controller,
         decoration: InputDecoration(
           icon: const Icon(Icons.calendar_month_outlined),

@@ -363,7 +363,11 @@ class IndexController extends GetxController {
     valor.clear();
     fechaproconteo.clear();
     fechacadconteo.clear();
+    stockController.text = "0";
     if (result) {
+      final results = await databaseRepositoryInterface.buscarProducto(
+          codigoBarra: resultbus.value!.codbarra.toString());
+      resultbus(results);
       Get.snackbar("Exito", "Se Actualizo el conteo");
     } else {
       Get.snackbar("Opps!", "No se Pudo Actualizar el conteo");
