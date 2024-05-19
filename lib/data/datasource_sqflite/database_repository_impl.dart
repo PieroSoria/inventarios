@@ -163,9 +163,36 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
     }
   }
 
+  Future<int> eje(
+      {required String tabla,
+      required String resultado2f,
+      required String resultadof,
+      required String fechapro,
+      required String fechacad,
+      required String valor,
+      required String comentario,
+      required String codigoBarra}) async {
+    Database mydb = await iniciarbasededatos();
+    try {
+      int rep = await mydb.rawUpdate(
+          "UPDATE $tabla SET conteo = ?, diferencia = ?,fecha_pro = ?, fecha_cad = ?,valor = ?, comentario = ? WHERE codbarra = ?",
+          [
+            resultado2f,
+            resultadof,
+            fechapro,
+            fechacad,
+            valor,
+            comentario,
+            codigoBarra
+          ]);
+      return rep;
+    } finally {
+      mydb.close();
+    }
+  }
+
   @override
   Future<bool> actualizarconteo({
-    required String ubicacion,
     required String codigoBarra,
     required String conteo,
     required String comentario,
@@ -193,19 +220,16 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
       int resultado = resultado2 - stocksrc;
       String resultadof = resultado.toString();
       String resultado2f = resultado2.toString();
+      final rep = await eje(
+          tabla: tabla,
+          resultado2f: resultado2f,
+          resultadof: resultadof,
+          fechapro: fechapro,
+          fechacad: fechacad,
+          valor: valor,
+          comentario: comentario,
+          codigoBarra: codigoBarra);
 
-      int rep = await mydb.rawUpdate(
-          "UPDATE $tabla SET conteo = ?, diferencia = ?,almacen = ?,fecha_pro = ?, fecha_cad = ?,valor = ?, comentario = ? WHERE codbarra = ?",
-          [
-            resultado2f,
-            resultadof,
-            ubicacion,
-            fechapro,
-            fechacad,
-            valor,
-            comentario,
-            codigoBarra
-          ]);
       return rep > 0;
     } catch (e) {
       debugPrint("Error de actualizar conteo $e");

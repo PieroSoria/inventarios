@@ -7,11 +7,11 @@ import 'package:sqflite/sqflite.dart';
 abstract class DatabaseRepositoryInterface {
   Future<Database> iniciarbasededatos();
   createDB(Database db, int version);
-  Future<Productos?> buscarProducto({required String codigoBarra,required String almacen});
+  Future<Productos?> buscarProducto(
+      {required String codigoBarra, required String almacen});
   Future<String?> obtenerbasedatos({required String tablanombre});
   Future<bool> insertalmacen({required Almacenes almacen});
   Future<bool> actualizarconteo({
-    required String ubicacion,
     required String codigoBarra,
     required String conteo,
     required String comentario,
@@ -19,13 +19,14 @@ abstract class DatabaseRepositoryInterface {
     required String fechacad,
     required String valor,
   });
-  Future<bool> sumarconteo(
-      {required String almacen,
-      required String codbarra,
-      required String comentario,
-      required String fechapro,
+  Future<bool> sumarconteo({
+    required String almacen,
+    required String codbarra,
+    required String comentario,
+    required String fechapro,
     required String fechacad,
-    required String valor,});
+    required String valor,
+  });
   Future<String?> obtenerconteo({
     required Database mydb,
     required String tabla,

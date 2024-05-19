@@ -186,7 +186,7 @@ class DetalleProScreen extends GetWidget<DetalleProController> {
                       child: Btnform(
                         funcion: () async {
                           controller.actualizarproductobyid(
-                            id: productos.id,
+                            id: productos.id.toString(),
                             tabla: tabla,
                           );
                         },

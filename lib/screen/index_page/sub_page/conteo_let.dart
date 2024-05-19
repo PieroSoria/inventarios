@@ -44,7 +44,7 @@ class _ConteoState extends State<Conteo> {
     _focusNode.requestFocus();
     if (widget.controller.xalmacen.value != "") {
       if (_switchValue == false) {
-        if (result != "0") {
+        if (result != "0" && result != "") {
           showModalBottomSheet(
             context: context,
             isScrollControlled: true,
@@ -57,8 +57,10 @@ class _ConteoState extends State<Conteo> {
               );
             },
           );
-        } else {
+        } else if (result != "") {
           widget.controller.sumarconteo(codbarra: value);
+        } else {
+          Get.snackbar("Opps!", "No existe el porducto");
         }
       } else {
         await widget.controller.buscarproducto(codbarra: value);

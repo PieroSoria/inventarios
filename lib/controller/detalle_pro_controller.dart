@@ -77,7 +77,7 @@ class DetalleProController extends GetxController {
                     valor = ?,
                     fecha_pro = ?,
                     fecha_cad = ?,
-                    comentario = ?,
+                    comentario = ?
                     WHERE id = ?
                     ''', arguments: [
       codbarra.text,
@@ -102,8 +102,7 @@ class DetalleProController extends GetxController {
   }
 
   Future<void> cargarlistaalmacen() async {
-    final result =
-        await databaseRepositoryInterface.listadelamacenes();
+    final result = await databaseRepositoryInterface.listadelamacenes();
     dropitemalmacen.assignAll(result);
   }
 }

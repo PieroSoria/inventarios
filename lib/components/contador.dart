@@ -106,7 +106,6 @@ class _ContadorState extends State<Contador> {
                     onChanged: (value) {
                       setState(() {
                         widget.controller.stockController.text = value;
-                        debugPrint(widget.controller.stockController.text);
                       });
                     },
                     style: const TextStyle(
