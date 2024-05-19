@@ -7,7 +7,7 @@ import 'package:sqflite/sqflite.dart';
 abstract class DatabaseRepositoryInterface {
   Future<Database> iniciarbasededatos();
   createDB(Database db, int version);
-  Future<Productos?> buscarProducto({required String codigoBarra});
+  Future<Productos?> buscarProducto({required String codigoBarra,required String almacen});
   Future<String?> obtenerbasedatos({required String tablanombre});
   Future<bool> insertalmacen({required Almacenes almacen});
   Future<bool> actualizarconteo({

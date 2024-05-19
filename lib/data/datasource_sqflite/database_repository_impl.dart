@@ -144,16 +144,16 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
   }
 
   @override
-  Future<Productos?> buscarProducto({required String codigoBarra}) async {
+  Future<Productos?> buscarProducto(
+      {required String codigoBarra, required String almacen}) async {
     Database mydb = await iniciarbasededatos();
     try {
       String? tabla = await obtenerNombreInventarioActivo(mydb: mydb);
-      debugPrint(tabla);
       final result = await mydb.rawQuery(
-          'SELECT * FROM $tabla WHERE codbarra = ?', [
-        codigoBarra
+          'SELECT * FROM $tabla WHERE codbarra = ? AND almacen = ?', [
+        codigoBarra,
+        almacen
       ]).then((value) => value.map((e) => Productos.fromMap(e)).first);
-      debugPrint("$result");
       return result;
     } catch (e) {
       debugPrint("Error de $e");

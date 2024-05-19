@@ -166,19 +166,31 @@ class _ContadorState extends State<Contador> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (context) {
-                      return BotomtypePorduct(
-                        controller: widget.controller,
-                        value: widget.controller.resultbus.value!.codbarra
-                            .toString(),
-                        barrido: false,
-                        stock: widget.controller.stockController,
-                      );
-                    },
+                  final result = await widget.controller.buscarproductoType(
+                    codbarra:
+                        widget.controller.resultbus.value!.codbarra.toString(),
                   );
+                  if (result != "0") {
+                    showModalBottomSheet(
+                      // ignore: use_build_context_synchronously
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) {
+                        return BotomtypePorduct(
+                          controller: widget.controller,
+                          value: widget.controller.resultbus.value!.codbarra
+                              .toString(),
+                          barrido: false,
+                          stock: widget.controller.stockController,
+                          tyProduct: result,
+                        );
+                      },
+                    );
+                  } else {
+                    widget.controller.actualizarConteo(
+                      conteo: widget.controller.stockController.text,
+                    );
+                  }
 
                   await widget.controller.buscarproducto(
                     codbarra:

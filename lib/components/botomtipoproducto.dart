@@ -5,38 +5,20 @@ import 'package:inventariosnew/components/input_custom_form.dart';
 import 'package:inventariosnew/components/input_edit_datecustom.dart';
 import 'package:inventariosnew/controller/index_controller.dart';
 
-class BotomtypePorduct extends StatefulWidget {
+class BotomtypePorduct extends StatelessWidget {
   const BotomtypePorduct({
     super.key,
     required this.controller,
     required this.value,
     required this.barrido,
-    this.stock,
+    this.stock, required this.tyProduct,
   });
 
   final IndexController controller;
   final String value;
   final bool barrido;
   final TextEditingController? stock;
-
-  @override
-  State<BotomtypePorduct> createState() => _BotomtypePorductState();
-}
-
-class _BotomtypePorductState extends State<BotomtypePorduct> {
-  String? typeProduct;
-
-  @override
-  void initState() {
-    capturartypo();
-    super.initState();
-  }
-
-  void capturartypo() async {
-    typeProduct =
-        await widget.controller.buscarproductoType(codbarra: widget.value);
-    setState(() {});
-  }
+  final String tyProduct;
 
   @override
   Widget build(BuildContext context) {
@@ -46,28 +28,28 @@ class _BotomtypePorductState extends State<BotomtypePorduct> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         children: [
-          typeProduct == "1"
+          tyProduct == "1"
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
                       width: 318,
                       child: InputEditCustom(
-                        controller: widget.controller.comentario,
+                        controller: controller.comentario,
                         labeltext: 'Comentario (opcional)',
                       ),
                     ),
                     SizedBox(
                       width: 318,
                       child: InputEditCustom(
-                        controller: widget.controller.valor,
+                        controller: controller.valor,
                         labeltext: 'Ingrese Lote',
                       ),
                     ),
                     SizedBox(
                       width: 318,
                       child: InputEditDateCustom(
-                        controller: widget.controller.fechaproconteo,
+                        controller: controller.fechaproconteo,
                         labeltext: "Ingrese fecha de produccion",
                         nuevoitem: "",
                         press: () async {
@@ -77,7 +59,7 @@ class _BotomtypePorductState extends State<BotomtypePorduct> {
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2100));
                           if (pickdate != null) {
-                            widget.controller.fechaproconteo.text =
+                            controller.fechaproconteo.text =
                                 DateFormat('yyyy-MM-dd').format(pickdate);
                           }
                         },
@@ -86,7 +68,7 @@ class _BotomtypePorductState extends State<BotomtypePorduct> {
                     SizedBox(
                       width: 318,
                       child: InputEditDateCustom(
-                        controller: widget.controller.fechacadconteo,
+                        controller: controller.fechacadconteo,
                         labeltext: "Ingrese fecha de caducacion",
                         nuevoitem: "",
                         press: () async {
@@ -96,7 +78,7 @@ class _BotomtypePorductState extends State<BotomtypePorduct> {
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2100));
                           if (pickdate != null) {
-                            widget.controller.fechacadconteo.text =
+                            controller.fechacadconteo.text =
                                 DateFormat('yyyy-MM-dd').format(pickdate);
                           }
                         },
@@ -104,20 +86,20 @@ class _BotomtypePorductState extends State<BotomtypePorduct> {
                     ),
                   ],
                 )
-              : typeProduct == "2"
+              : tyProduct == "2"
                   ? Column(
                       children: [
                         SizedBox(
                           width: 318,
                           child: InputEditCustom(
-                            controller: widget.controller.comentario,
+                            controller: controller.comentario,
                             labeltext: 'Comentario (opcional)',
                           ),
                         ),
                         SizedBox(
                           width: 318,
                           child: InputEditCustom(
-                            controller: widget.controller.valor,
+                            controller: controller.valor,
                             labeltext: 'Ingrese Serie',
                           ),
                         ),
@@ -128,7 +110,7 @@ class _BotomtypePorductState extends State<BotomtypePorduct> {
                         SizedBox(
                           width: 318,
                           child: InputEditCustom(
-                            controller: widget.controller.comentario,
+                            controller: controller.comentario,
                             labeltext: 'Comentario (opcional)',
                           ),
                         ),
@@ -137,11 +119,11 @@ class _BotomtypePorductState extends State<BotomtypePorduct> {
           ElevatedButton(
             onPressed: () async {
               Get.back();
-              if (widget.barrido) {
-                await widget.controller.sumarconteo(codbarra: widget.value);
+              if (barrido) {
+                await controller.sumarconteo(codbarra: value);
               } else {
-                await widget.controller.actualizarConteo(
-                  conteo: widget.stock!.text,
+                await controller.actualizarConteo(
+                  conteo: stock!.text,
                 );
               }
             },

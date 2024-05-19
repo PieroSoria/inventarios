@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -21,6 +23,7 @@ class _ConteoState extends State<Conteo> {
 
   @override
   void initState() {
+    _focusNode.requestFocus();
     widget.controller.instanciarubicaciones();
     super.initState();
   }
@@ -37,19 +40,26 @@ class _ConteoState extends State<Conteo> {
   }
 
   Future<dynamic> funciondeconteo(String value) async {
+    final result = await widget.controller.buscarproductoType(codbarra: value);
+    _focusNode.requestFocus();
     if (widget.controller.xalmacen.value != "") {
       if (_switchValue == false) {
-        showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          builder: (context) {
-            return BotomtypePorduct(
-              controller: widget.controller,
-              value: value,
-              barrido: true,
-            );
-          },
-        );
+        if (result != "0") {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (context) {
+              return BotomtypePorduct(
+                controller: widget.controller,
+                value: value,
+                barrido: true,
+                tyProduct: result,
+              );
+            },
+          );
+        } else {
+          widget.controller.sumarconteo(codbarra: value);
+        }
       } else {
         await widget.controller.buscarproducto(codbarra: value);
       }
@@ -208,6 +218,13 @@ class _ConteoState extends State<Conteo> {
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: Text(
                               "Conteo: ${resultado.conteo}",
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: Text(
+                              "Almacen: ${resultado.almacen}",
                               style: const TextStyle(fontSize: 16),
                             ),
                           ),

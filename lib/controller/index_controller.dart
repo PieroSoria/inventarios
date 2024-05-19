@@ -43,7 +43,7 @@ class IndexController extends GetxController {
   var resultbus = Rx<Productos?>(null);
   var nameexcel = TextEditingController();
   final searchalmacen = TextEditingController();
-  final stockController = TextEditingController();
+  final stockController = TextEditingController(text: "0");
   final selectalmacen = TextEditingController();
   final selectconteo = TextEditingController();
   final tablenameinventario = TextEditingController();
@@ -83,6 +83,12 @@ class IndexController extends GetxController {
     usarindex();
     verificaropcionedit();
     super.onInit();
+  }
+
+  @override
+  void dispose() {
+    indexpage.value = 0;
+    super.dispose();
   }
 
   void verificaropcionedit() async {
@@ -305,8 +311,8 @@ class IndexController extends GetxController {
   }
 
   Future<void> buscarproducto({required String codbarra}) async {
-    final result =
-        await databaseRepositoryInterface.buscarProducto(codigoBarra: codbarra);
+    final result = await databaseRepositoryInterface.buscarProducto(
+        codigoBarra: codbarra, almacen: xalmacen.value);
     if (result != null) {
       resultbus(result);
     } else {
@@ -315,8 +321,8 @@ class IndexController extends GetxController {
   }
 
   Future<String> buscarproductoType({required String codbarra}) async {
-    final result =
-        await databaseRepositoryInterface.buscarProducto(codigoBarra: codbarra);
+    final result = await databaseRepositoryInterface.buscarProducto(
+        codigoBarra: codbarra, almacen: xalmacen.value);
     if (result != null) {
       return result.tipoproducto.toString();
     } else {
@@ -366,7 +372,8 @@ class IndexController extends GetxController {
     stockController.text = "0";
     if (result) {
       final results = await databaseRepositoryInterface.buscarProducto(
-          codigoBarra: resultbus.value!.codbarra.toString());
+          codigoBarra: resultbus.value!.codbarra.toString(),
+          almacen: xalmacen.value);
       resultbus(results);
       Get.snackbar("Exito", "Se Actualizo el conteo");
     } else {
