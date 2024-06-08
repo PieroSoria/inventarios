@@ -12,6 +12,7 @@ abstract class DatabaseRepositoryInterface {
   Future<String?> obtenerbasedatos({required String tablanombre});
   Future<bool> insertalmacen({required Almacenes almacen});
   Future<bool> actualizarconteo({
+    required String xalmacen,
     required String codigoBarra,
     required String conteo,
     required String comentario,
@@ -31,6 +32,7 @@ abstract class DatabaseRepositoryInterface {
     required Database mydb,
     required String tabla,
     required String codbarra,
+    required String almacen,
   });
   Future<bool> datoactivo();
   Future<String?> obtenerNombreInventarioActivo({required Database mydb});
@@ -38,6 +40,7 @@ abstract class DatabaseRepositoryInterface {
     required Database mydb,
     required String tabla,
     required String codbarra,
+    required String almacen,
   });
   Future<List<Productos>> getdataProductobyDatabase({required String query});
   Future<bool> updatedata(

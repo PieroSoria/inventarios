@@ -41,7 +41,7 @@ class _ConteoState extends State<Conteo> {
 
   Future<dynamic> funciondeconteo(String value) async {
     final result = await widget.controller.buscarproductoType(codbarra: value);
-    _focusNode.requestFocus();
+
     if (widget.controller.xalmacen.value != "") {
       if (_switchValue == false) {
         if (result != "0" && result != "") {
@@ -80,6 +80,7 @@ class _ConteoState extends State<Conteo> {
       );
     }
     widget.controller.buscarController.clear();
+    _focusNode.requestFocus();
   }
 
   @override
@@ -179,7 +180,8 @@ class _ConteoState extends State<Conteo> {
                   decoration: InputDecoration(
                     labelText: 'Ingrese código de barras',
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
                 ),
               ),

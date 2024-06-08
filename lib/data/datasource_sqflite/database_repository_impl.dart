@@ -91,10 +91,11 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
     required Database mydb,
     required String tabla,
     required String codbarra,
+    required String almacen,
   }) async {
     try {
       final rows = await mydb.rawQuery(
-        "SELECT stock_inicial FROM $tabla WHERE codbarra = '$codbarra' LIMIT 1",
+        "SELECT stock_inicial FROM $tabla WHERE codbarra = '$codbarra' AND almacen = '$almacen' LIMIT 1",
       );
       if (rows.isNotEmpty) {
         return rows.first['stock_inicial'] as String?;
@@ -110,11 +111,13 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
   Future<String?> obtenerconteo(
       {required Database mydb,
       required String tabla,
-      required String codbarra}) async {
+      required String codbarra,
+      required String almacen}) async {
     try {
       List<Map<String, dynamic>> rows = await mydb.rawQuery(
-        "SELECT conteo FROM $tabla WHERE codbarra = '$codbarra' LIMIT 1",
+        "SELECT conteo FROM $tabla WHERE codbarra = '$codbarra' AND almacen = '$almacen' LIMIT 1",
       );
+
       if (rows.isNotEmpty) {
         return rows.first['conteo'] as String?;
       } else {
@@ -165,6 +168,7 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
 
   Future<int> eje(
       {required String tabla,
+      required String xalmacen,
       required String resultado2f,
       required String resultadof,
       required String fechapro,
@@ -175,16 +179,18 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
     Database mydb = await iniciarbasededatos();
     try {
       int rep = await mydb.rawUpdate(
-          "UPDATE $tabla SET conteo = ?, diferencia = ?,fecha_pro = ?, fecha_cad = ?,valor = ?, comentario = ? WHERE codbarra = ?",
-          [
-            resultado2f,
-            resultadof,
-            fechapro,
-            fechacad,
-            valor,
-            comentario,
-            codigoBarra
-          ]);
+        "UPDATE $tabla SET conteo = ?, diferencia = ?,fecha_pro = ?, fecha_cad = ?,valor = ?, comentario = ? WHERE codbarra = ? AND almacen = ?",
+        [
+          resultado2f,
+          resultadof,
+          fechapro,
+          fechacad,
+          valor,
+          comentario,
+          codigoBarra,
+          xalmacen,
+        ],
+      );
       return rep;
     } finally {
       mydb.close();
@@ -193,6 +199,7 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
 
   @override
   Future<bool> actualizarconteo({
+    required String xalmacen,
     required String codigoBarra,
     required String conteo,
     required String comentario,
@@ -207,12 +214,16 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
         mydb: mydb,
         tabla: tabla!,
         codbarra: codigoBarra,
+        almacen: xalmacen,
       );
+
       String? conteof = await obtenerconteo(
+        almacen: xalmacen,
         mydb: mydb,
         tabla: tabla,
         codbarra: codigoBarra,
       );
+
       int stocksrc = int.parse(stock!);
       int conteoft = int.parse(conteof!);
       int conteo2 = int.parse(conteo);
@@ -221,6 +232,7 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
       String resultadof = resultado.toString();
       String resultado2f = resultado2.toString();
       final rep = await eje(
+          xalmacen: xalmacen,
           tabla: tabla,
           resultado2f: resultado2f,
           resultadof: resultadof,
@@ -254,11 +266,13 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
         mydb: mydb,
       );
       String? conteo = await obtenerconteo(
+        almacen: almacen,
         tabla: tabla!,
         codbarra: codbarra,
         mydb: mydb,
       );
       String? stock = await obtenerstock(
+        almacen: almacen,
         mydb: mydb,
         tabla: tabla,
         codbarra: codbarra,
@@ -269,17 +283,18 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
       int diferencia = resultado - int.parse(stock!);
       String diferenciaf = diferencia.toString();
       int rep = await mydb.rawUpdate(
-          'UPDATE $tabla SET conteo = ?, diferencia = ?, almacen = ?,fecha_pro = ?,fecha_cad = ?, valor = ?, comentario = ? WHERE codbarra = ?',
-          [
-            resultadof,
-            diferenciaf,
-            almacen,
-            fechapro,
-            fechacad,
-            valor,
-            comentario,
-            codbarra,
-          ]);
+        'UPDATE $tabla SET conteo = ?, diferencia = ?,fecha_pro = ?,fecha_cad = ?, valor = ?, comentario = ? WHERE codbarra = ? AND almacen = ?',
+        [
+          resultadof,
+          diferenciaf,
+          fechapro,
+          fechacad,
+          valor,
+          comentario,
+          codbarra,
+          almacen,
+        ],
+      );
       return rep > 0;
     } catch (e) {
       debugPrint("Error al sumar conteo $e");

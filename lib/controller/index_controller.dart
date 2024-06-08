@@ -357,6 +357,7 @@ class IndexController extends GetxController {
 
   Future<void> actualizarConteo({required String conteo}) async {
     final result = await databaseRepositoryInterface.actualizarconteo(
+      xalmacen: xalmacen.value,
       codigoBarra: resultbus.value!.codbarra.toString(),
       conteo: conteo,
       comentario: comentario.text,
