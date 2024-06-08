@@ -36,7 +36,7 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
         [almacen.almacen.toString()],
       );
       int count = Sqflite.firstIntValue(result)!;
-      if (count == 0) {
+      if (count == 0 && almacen.almacen.toString() != "null") {
         int res = await mydb.rawInsert(
           'INSERT INTO almacenes (almacen) VALUES(?)',
           [
@@ -443,14 +443,16 @@ class DatabaseRepositoryImpl implements DatabaseRepositoryInterface {
         await insertalmacen(
           almacen: Almacenes(
             id: "",
-            almacen: fila[2]?.value?.toString() ?? '',
+            almacen: fila[2]?.value?.toString(),
           ),
         );
 
-        await insertarProductos(
-          prod: productos,
-          tableName: basedatos,
-        );
+        if (productos.codbarra.toString() != "") {
+          await insertarProductos(
+            prod: productos,
+            tableName: basedatos,
+          );
+        }
       }
     } catch (e) {
       debugPrint("Error de insertar producto $e");
